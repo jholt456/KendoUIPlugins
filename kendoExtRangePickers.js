@@ -1,4 +1,5 @@
-(function($) {
+(/// <author>Joshua Holt</author>
+	function($) {
     
     var kendo = window.kendo,
         ui = kendo.ui,

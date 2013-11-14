@@ -1,7 +1,7 @@
+/// <author>Joshua Holt</author>
 (function(kendo, $) {
     // shorten references to variables. this is better for uglification
-     var kendo = window.kendo,
-        ui = kendo.ui,
+     var ui = kendo.ui,
         Widget = ui.ExtDropDown;
         CHANGE = "change";
 

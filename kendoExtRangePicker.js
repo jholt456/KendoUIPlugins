@@ -1,3 +1,4 @@
+/// <author>Joshua Holt</author>
 (function($) {
     // shorten references to variables. this is better for uglification
     var kendo = window.kendo,

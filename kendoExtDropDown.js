@@ -1,4 +1,5 @@
-(function(kendo, $) {
+(/// <author>Joshua Holt</author>
+    function(kendo, $) {
     // shorten references to variables. this is better for uglification
     var ui = kendo.ui,
         Widget = ui.Widget,

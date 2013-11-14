@@ -1,10 +1,9 @@
+/// <author>Joshua Holt</author>
 (function(kendo, $) {
     // shorten references to variables. this is better for uglification
-    // shorten references to variables. this is better for uglification
-     var kendo = window.kendo,
-        ui = kendo.ui,
-        Widget = ui.ExtDropDownRangePicker,
-        CHANGE = "change";
+     var ui = kendo.ui,
+         Widget = ui.ExtDropDownRangePicker,
+         CHANGE = "change";
 
         var ExtDateRangePicker = Widget.extend({
             _uid: null,
