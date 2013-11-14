@@ -1,0 +1,271 @@
+<html>
+
+<head>
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://cdn.kendostatic.com/2013.2.918/styles/kendo.common.min.css">
+    <link rel="stylesheet" type="text/css" href="http://cdn.kendostatic.com/2013.2.918/styles/kendo.default.min.css">
+    <script type="text/javascript" src="http://cdn.kendostatic.com/2013.2.918/js/kendo.all.min.js"></script>
+   
+   <script type="text/javascript" src="kendoExtDropDown.js"></script>
+    <script type="text/javascript" src="kendoExtRangePicker.js"></script>
+    <script type="text/javascript" src="kendoExtRangePickers.js"></script>
+
+	<script type="text/javascript" src="kendoExtRangePickerDropDown.js"></script>
+	<script type="text/javascript" src="kendoExtRangePickerDropDowns.js"></script>
+	<script type="text/javascript" src="kendoExtDateRangePicker.js"></script>
+
+	
+	
+	<style type="text/css">
+	.k-state-in-range {
+		color: #fff;
+		background-color: #F1B69C;
+		border-color: #F1B69C;
+		background-image: none,linear-gradient(to bottom,#FFCEAD 0,#E6A586 100%);
+	}
+	.btn-success {
+		color: #fff;
+		text-shadow: 0 -1px 0 rgba(0,0,0,0.25);
+		background-color: #5bb75b;
+		background-image: -moz-linear-gradient(top,#62c462,#51a351);
+		background-image: -webkit-gradient(linear,0 0,0 100%,from(#62c462),to(#51a351));
+		background-image: -webkit-linear-gradient(top,#62c462,#51a351);
+		background-image: -o-linear-gradient(top,#62c462,#51a351);
+		background-image: linear-gradient(to bottom,#62c462,#51a351);
+		background-repeat: repeat-x;
+		border-color: #51a351 #51a351 #387038;
+		border-color: rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);
+		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff62c462',endColorstr='#ff51a351',GradientType=0);
+		filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+		
+	}
+
+	.section {
+		margin-left:30px;
+	}
+	</style>
+</head>
+<body>
+	<div style="padding-bottom:30px">
+		<h2>Basic Range Pickers</h2>
+		<div class="section">
+			<p></p>
+			<h3>Date Range Picker</h3>
+			<p>Standard config options for from/to box</p>
+			<div id="dateRangePicker"></div>
+
+			<h3>Date Range Picker With Custom Seperator</h3>
+			<p>Seperator is easily changed</p>
+			<div id="dateRangePickerWithSep"></div>
+
+			<h3>Date Range Picker With Custom Seperator</h3>
+			<p>Force users to select values</p>
+			<div id="dateRangePickerWithForce"></div>
+
+			<h3>Calendar Date Range Picker</h3>
+			<p>Calendar highlights values between selected dates on the left and right</p>
+			<div id="calendarRangePicker" ></div>
+
+			<h3>Numeric Range Picker</h3>
+			<p>Numeric version also, when users select a greater value for the "to" value, the pickers will auto correct (does this for date pciker also)</p>
+			<div id="numericRangePicker"></div>
+		</div>
+
+		<h2>Extendable Drop Down</h2>
+		<div class="section">
+			<p>These examples use a drop down which allows users to inject any content into them during set up. They were the first step to building the plugins shown further down; so I included them here. They require a bit of extra configuration and are still a little rough, though they allow some intersting things (like the grid drop down).</p>
+
+			<h3>Numeric Range Picker Dropdown</h3>
+			<div id="dropDownNumeric"></div>
+			<div id="dropDownNumericContent"></div>
+
+			<h3>Date Range Picker Dropdown</h3>
+			<div id="dropDownDateRange"></div>
+			<div id="dropDownDateContent"></div>
+
+			<h3>Date Range Picker Dropdown</h3>
+			<div id="dropDownCalendarRange"></div>
+			<div id="dropDownCalendarContent"></div>
+
+			<h3>Grid Drop Down</h3>
+			<div id="dropDownGrid"></div>
+			<div id="dropDownGridContent"></div>
+		</div>
+		<h2>Ranged Drop Down Plugins</h2>
+		<div class="section">
+			<p>These are the actual drop down range picker plugins. The behave like the ones above, but they are much easier to use</p>
+			
+			<h3>Date Range Drop Down</h3>
+			<div id="dropDownDatePicker"></div>
+
+			<h3>Calendar Range Drop Down</h3>
+			<div id="dropDownCalendarPicker"></div>
+
+			<h3>Numeric Range Drop Down</h3>
+			<div id="dropDownNumericPicker"></div>
+
+			<h3>Customized Picker</h3>
+			<p>This is a custom implmentation created to mimic the picker in google analytics<p>
+			<div id="dropDownGoogleStylePicker"></div>
+		</div>
+	</div>
+	<script>
+		$(function() {
+			var today = new Date();
+			var future = new Date();
+			var x = 31; 
+			future.setDate(today.getDate() + x);
+			$("#dateRangePicker").kendoDateRangePicker({change:changed, 
+															   fromPickerOptions : {
+																	value:today
+																},
+																toPickerOptions : {
+																	value: future
+																}});
+			$("#dateRangePickerWithSep").kendoDateRangePicker({change:changed, 
+															   seperator:" < > "
+																});
+			$("#dateRangePickerWithForce").kendoDateRangePicker({ change:changed, 
+																   allowOpenEnd: false, 
+																   defaultPickerOptions: {
+																		value:new Date()
+																	}});
+			$("#calendarRangePicker").kendoCalendarRangePicker({change:changed}).data("kendoCalendarRangePicker");
+			$("#numericRangePicker").kendoNumericRangePicker({change:changed});
+
+			$("#dropDownDatePicker").kendoExtDropDownDateRangePicker({change:changed});
+			$("#dropDownCalendarPicker").kendoExtDropDownCalendarRangePicker({change:changed});
+			$("#dropDownNumericPicker").kendoExtDropDownNumericRangePicker({change:changed});
+			$("#dropDownGoogleStylePicker").kendoExtDateRangePicker({change:changed});
+
+
+
+			var numericSelectorDD = $("#dropDownNumericContent").kendoNumericRangePicker( { change:changed2 } )
+															 	.data("kendoNumericRangePicker");
+
+			var dateSelectorDD = $("#dropDownDateContent").kendoDateRangePicker( { change:changed2 } )
+														  .data("kendoDateRangePicker");
+
+			var calendarSelectorDD = $("#dropDownCalendarContent").kendoCalendarRangePicker( { change:changed2 } )
+														  .data("kendoCalendarRangePicker");
+
+			var gridSelectorDD = $("#dropDownGridContent").kendoGrid({
+                        dataSource: {
+                            type: "odata",
+                            transport: {
+                                read: "http://demos.kendoui.com/service/Northwind.svc/Orders"
+                            },
+                            schema: {
+                                model: {
+                                    fields: {
+                                        OrderID: { type: "number" },
+                                        Freight: { type: "number" },
+                                        ShipName: { type: "string" },
+                                        OrderDate: { type: "date" },
+                                        ShipCity: { type: "string" }
+                                    }
+                                }
+                            },
+                            pageSize: 20,
+                            serverPaging: true,
+                            serverFiltering: true,
+                            serverSorting: true
+                        },
+                        height: 430,
+                        filterable: true,
+                        sortable: true,
+                        pageable: true,
+            			selectable: true,
+                        columns: [{
+                                field:"OrderID",
+                                filterable: false
+                            },
+                            "Freight",
+                            {
+                                field: "OrderDate",
+                                title: "Order Date",
+                                width: 120,
+                                format: "{0:MM/dd/yyyy}"
+                            }, {
+                                field: "ShipName",
+                                title: "Ship Name",
+                                width: 260
+                            }, {
+                                field: "ShipCity",
+                                title: "Ship City",
+                                width: 150
+                            }
+                        ]
+                    }).data("kendoGrid");
+
+			var numericDD = $("#dropDownNumeric").kendoExtDropDown({ content: numericSelectorDD.element,
+																	 change:changed,
+													  		   		  displayFormatter : function() {
+													  		   		  	var val = numericSelectorDD.value();
+													  		   		  	return formatValue(val);
+													  		   		  } 
+													  		   		})
+										   		  .data("kendoExtDropDown");
+	   		var dateDD = $("#dropDownDateRange").kendoExtDropDown({ content: dateSelectorDD.element,
+	   																change:changed,
+													  		   		  displayFormatter : function() {
+													  		   		  	var val = dateSelectorDD.value();
+													  		   		  	return formatValue(val, "M/d/yyyy");
+													  		   		  } 
+													  		   		})
+										   	   .data("kendoExtDropDown");
+	   		var calendarDD = $("#dropDownCalendarRange").kendoExtDropDown({ content: calendarSelectorDD.element,
+	   																		change:changed,
+															  		   		  displayFormatter : function() {
+															  		   		  	var val = calendarSelectorDD.value();
+															  		   		  	return formatValue(val, "M/d/yyyy");
+															  		   		  }
+															  		   		})
+											   	  .data("kendoExtDropDown");
+
+			var gridDD = $("#dropDownGrid").kendoExtDropDown({ content: gridSelectorDD.element,
+															   change:changed,
+																valueProvider: function(e) {
+																	var result = "";
+																	var selected = gridSelectorDD.select();
+																	var data = gridSelectorDD.dataItem(selected);
+																	if(data) {
+											                    		return data.CustomerID;
+											                    	}
+											                    	return undefined;
+																} 
+															})
+											   	  		.data("kendoExtDropDown");
+
+			numericSelectorDD.bind("change", changed);
+			dateSelectorDD.bind("change", changed);
+			calendarSelectorDD.bind("change", changed);
+
+			numericDD.bind("open", function(e) {
+				console.log("open");
+			});
+
+			numericDD.bind("close", function(e) {
+				console.log("close");
+			});
+
+			function changed(e) {
+				console.log("changed (event binding)");
+				console.log(e.sender.value());
+			} 
+
+			function changed2(e) {
+				console.log("changed (options bound)");
+				console.log(e.sender.value());
+			} 
+
+			function formatValue(val, format) {
+				if(val && (val.from || val.to)) {
+	   		  		return kendo.format("{0} - {1}", kendo.toString(val.from, format) || "and Before", kendo.toString(val.to, format) || "and After");
+	   		  	}
+	   		  	return "";
+			}
+		});
+	</script>
+</body>
+</html>
