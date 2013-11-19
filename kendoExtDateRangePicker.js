@@ -16,6 +16,10 @@
                 // Generate a unique id.
                 that._uid = new Date().getTime();
             },
+             _isFunction : function(functionToCheck) {
+                 var getType = {};
+                 return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
+            },
             _create : function() {
                 var that = this;
 
@@ -54,16 +58,37 @@
                     that.close();
                 });
 
+
                 accept.on("click", function() {
                    that._value = that._rangePicker.value();
                    that.close();
                 });
 
                 that.content(" ");
+
                 var left = $("<div/>");
                 var right = $("<div/>");
              
                 left.append(that._rangePicker.element);
+
+                if(that.options.ranges && that.options.ranges.length > 0) {
+                    var ranges = $("<div/>");
+                    for(var rangeIdx = 0; rangeIdx < that.options.ranges.length; rangeIdx++) {
+                        var current = that.options.ranges[rangeIdx];
+                        var rangeBtn = $("<button>").addClass("btn range").data("range-idx", rangeIdx);
+                        rangeBtn.text(current.text || "");
+                        rangeBtn.on("click", function() {
+                            var range = that.options.ranges[$(this).data("range-idx")].value;
+
+                            var from = range.from && that._isFunction(range.from) ? range.from() : range.from;
+                            var to = range.to && that._isFunction(range.to) ? range.to() : range.to;
+                           
+                            that.value({from:from, to:to});
+                        });
+                        ranges.append(rangeBtn);
+                    }
+                    left.append(ranges);
+                }
                 left.css({"float":"left", "width":"200px", "margin":"5px", "height":"227px", "position":"relative"});
                 right.css({"float":"right", "width":"410px", "margin":"5px"});
                 right.append(that._calendarRange.element);

@@ -7,6 +7,7 @@
     <script type="text/javascript" src="http://cdn.kendostatic.com/2013.2.918/js/kendo.all.min.js"></script>
    
    <script type="text/javascript" src="kendoExtDropDown.js"></script>
+   <script type="text/javascript" src="kendoExtDropDownKendoWidget.js"></script>
     <script type="text/javascript" src="kendoExtRangePicker.js"></script>
     <script type="text/javascript" src="kendoExtRangePickers.js"></script>
 
@@ -91,6 +92,17 @@
 			<div id="dropDownGrid"></div>
 			<div id="dropDownGridContent"></div>
 		</div>
+		<h2>Kendo Widget Drop Downs</h2>
+		<div class="section">
+			<p>These examples extend the above drop down specfifically for use with kendo widgets.</p>
+			<h3>Kendo Widget Drop Down Tree View</h3>
+			<div id="kendoDropDownWidget"></div>
+			<h3>Kendo Widget Drop Down Grid</h3>
+			<div id="kendoDropDownGrid"></div>
+			<h3>Kendo Widget Drop Down Editor</h3>
+			<div id="kendoDropDownEditor"></div>
+		
+		</div>
 		<h2>Ranged Drop Down Plugins</h2>
 		<div class="section">
 			<p>These are the actual drop down range picker plugins. The behave like the ones above, but they are much easier to use</p>
@@ -122,21 +134,66 @@
 																toPickerOptions : {
 																	value: future
 																}});
+
 			$("#dateRangePickerWithSep").kendoDateRangePicker({change:changed, 
 															   seperator:" < > "
 																});
+
 			$("#dateRangePickerWithForce").kendoDateRangePicker({ change:changed, 
 																   allowOpenEnd: false, 
 																   defaultPickerOptions: {
 																		value:new Date()
 																	}});
+
 			$("#calendarRangePicker").kendoCalendarRangePicker({change:changed}).data("kendoCalendarRangePicker");
 			$("#numericRangePicker").kendoNumericRangePicker({change:changed});
 
 			$("#dropDownDatePicker").kendoExtDropDownDateRangePicker({change:changed});
 			$("#dropDownCalendarPicker").kendoExtDropDownCalendarRangePicker({change:changed});
 			$("#dropDownNumericPicker").kendoExtDropDownNumericRangePicker({change:changed});
-			$("#dropDownGoogleStylePicker").kendoExtDateRangePicker({change:changed});
+			$("#dropDownGoogleStylePicker").kendoExtDateRangePicker({change:changed, ranges:[
+					{
+						text :"Past 90 Days",
+						value : {
+									from : function() {
+														var date = new Date();
+														date.setDate(date.getDate() - 90)
+														return date;
+													},
+									to : new Date()
+								}
+					},
+					{
+						text :"Past 60 Days",
+						value : {
+									from : function() {
+														var date = new Date();
+														date.setDate(date.getDate() - 60)
+														return date;
+													},
+									to : new Date()
+								}
+					},
+					{
+						text :"Past 30 Days",
+						value : {
+									from : function() {
+														var date = new Date();
+														date.setDate(date.getDate() - 30)
+														return date;
+													},
+									to : new Date()
+								}
+					},
+					{
+						text :"This Year",
+						value : {
+									from : new Date(new Date().getFullYear(), 0, 1),
+									to : new Date()
+								}
+					}
+
+				]});
 
 
 
@@ -236,6 +293,100 @@
 																} 
 															})
 											   	  		.data("kendoExtDropDown");
+
+ var inlineDefault = new kendo.data.HierarchicalDataSource({
+                    data: [
+                        { text: "Furniture", items: [
+                            { text: "Tables & Chairs" },
+                            { text: "Sofas" },
+                            { text: "Occasional Furniture" }
+                        ] },
+                        { text: "Decor", items: [
+                            { text: "Bed Linen" },
+                            { text: "Curtains & Blinds" },
+                            { text: "Carpets" }
+                        ] }
+                    ]
+                });
+
+ 			
+
+			// var kendoDropDownEditor= $("#kendoDropDownEditor").kendoExtDropDownKendoWidget({ widget:  function() {
+			// 	return $("<textarea rows=\"10\" cols=\"30\" contentEditable>asdfsd a sdfs</textarea>").kendoEditor().data("kendoEditor");
+			// },
+			// 																				   change:changed,
+			// 																				   select:changed
+			// 																				})
+			// 																   	  		.data("kendoExtDropDownKendoWidget");
+
+			var kendoDropDownTreeView = $("#kendoDropDownWidget").kendoExtDropDownKendoWidget({ widget: function() {
+																	return $("<div/>").kendoTreeView({
+																		                    dataSource: inlineDefault
+																		                })
+																					.data("kendoTreeView");
+																},
+															   change:changed,
+															   select:changed
+															})
+											   	  		.data("kendoExtDropDownKendoWidget");
+
+			var kendoDropDownGrid = $("#kendoDropDownGrid").kendoExtDropDownKendoWidget({ widget: function() {
+																	return $("<div/>").kendoGrid({
+												                        dataSource: {
+												                            type: "odata",
+												                            transport: {
+												                                read: "http://demos.kendoui.com/service/Northwind.svc/Orders"
+												                            },
+												                            schema: {
+												                                model: {
+												                                    fields: {
+												                                        OrderID: { type: "number" },
+												                                        Freight: { type: "number" },
+												                                        ShipName: { type: "string" },
+												                                        OrderDate: { type: "date" },
+												                                        ShipCity: { type: "string" }
+												                                    }
+												                                }
+												                            },
+												                            pageSize: 20,
+												                            serverPaging: true,
+												                            serverFiltering: true,
+												                            serverSorting: true
+												                        },
+												                        height: 430,
+												                        filterable: true,
+												                        sortable: true,
+												                        pageable: true,
+												            			selectable: true,
+												                        columns: [{
+												                                field:"OrderID",
+												                                filterable: false
+												                            },
+												                            "Freight",
+												                            {
+												                                field: "OrderDate",
+												                                title: "Order Date",
+												                                width: 120,
+												                                format: "{0:MM/dd/yyyy}"
+												                            }, {
+												                                field: "ShipName",
+												                                title: "Ship Name",
+												                                width: 260
+												                            }, {
+												                                field: "ShipCity",
+												                                title: "Ship City",
+												                                width: 150
+												                            }
+												                        ]
+												                    }).data("kendoGrid");
+																},
+															   change:changed,
+															   select:changed,
+															   valueFormatter : function(val) {
+															   	return val? val.CustomerID : "";
+															   }
+															})
+											   	  		.data("kendoExtDropDownKendoWidget");
 
 			numericSelectorDD.bind("change", changed);
 			dateSelectorDD.bind("change", changed);
