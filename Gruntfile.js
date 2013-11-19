@@ -56,6 +56,9 @@ module.exports = function(grunt) {
   // Default task.
   grunt.registerTask('default', ['sort', 'uglify']);
 
+  // Travis CI task.
+  grunt.registerTask('travis', 'test');
+  
   //Build Task.
   grunt.registerTask('build', ['test', 'uglify']);
 
