@@ -54,8 +54,8 @@ var ExtDropDown = Widget.extend({
             }).data("kendoDropDownList");
 
             // If a width has been provided, then set the new width.
-            if (options.dropDownWidth) {
-                that._dropdown._focused.width(options.dropDownWidth);
+            if (that.options.dropDownWidth) {
+                that._dropdown._focused.width(that.options.dropDownWidth);
             }
 
             wrapper.hide()

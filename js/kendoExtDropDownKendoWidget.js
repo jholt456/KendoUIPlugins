@@ -84,7 +84,10 @@ require("kendoExtDropDown");
                                                                                                that._widget.select ? that._widget.select() : "";
                      
                 }
-                  that._widget.value ? that._widget.value(val) : that._widget.select ? that._widget.select(val) : "";
+
+                return that._widget.value ? that._widget.value(val) : 
+                                        that._widget.select ? that._widget.select(val) : 
+                                                              $.noop();
             }
         });
 

@@ -3,6 +3,9 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
+    qunit: {
+      all: ['test/index.html']
+    },
    jshint: {
         options: {
           browser: true,
@@ -43,16 +46,17 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
 
 
-  // Testing tasks
-  grunt.registerTask('test', ['jshint']);
 
-  //
+  //File ordering task (sorts and combines)
   grunt.registerTask('sort', ['neuter']);
+
+  // Testing tasks
+  grunt.registerTask('test', ['jshint', 'sort', 'qunit']);
 
   // Default task.
   grunt.registerTask('default', ['sort', 'uglify']);
 
   //Build Task.
-  grunt.registerTask('build', ['test', 'sort', 'uglify']);
+  grunt.registerTask('build', ['test', 'uglify']);
 
 };

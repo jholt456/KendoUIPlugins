@@ -54,8 +54,8 @@ var ExtDropDown = Widget.extend({
             }).data("kendoDropDownList");
 
             // If a width has been provided, then set the new width.
-            if (options.dropDownWidth) {
-                that._dropdown._focused.width(options.dropDownWidth);
+            if (that.options.dropDownWidth) {
+                that._dropdown._focused.width(that.options.dropDownWidth);
             }
 
             wrapper.hide()
@@ -183,120 +183,120 @@ var ExtDropDown = Widget.extend({
         CHANGE = "change";
 
     var RangePicker = Widget.extend({
-    		_from:null,
-    		_to:null,
-    		_uid:null,
-    		_value:null,
-	        init: function(element, options) {
+            _from:null,
+            _to:null,
+            _uid:null,
+            _value:null,
+            init: function(element, options) {
 
- 				var that = this;
+                var that = this;
 
-	        	// base call to initialize widget
-	        	Widget.fn.init.call(that, element, options);
+                // base call to initialize widget
+                Widget.fn.init.call(that, element, options);
 
-	        	 // Generate a unique id.
-	            that._uid = new Date().getTime();
-		      
-	          	var template = that.settings.template || "<input/>";
+                 // Generate a unique id.
+                that._uid = new Date().getTime();
+              
+                var template = that.settings.template || "<input/>";
 
-	           	var from = $(template);
-	           	var to = $(template);
+                var from = $(template);
+                var to = $(template);
 
-	            // append all elements to the DOM
-	            that.element.append(from)
-	            			.append(that.options.seperator)
-	                        .append(to);
+                // append all elements to the DOM
+                that.element.append(from)
+                            .append(that.options.seperator)
+                            .append(to);
 
- 				 var changeHandler = function(e) {
-		    		var val = that._getValue();
- 					var fromVal = val.from;
- 					var toVal = val.to;
+                 var changeHandler = function(e) {
+                    var val = that._getValue();
+                    var fromVal = val.from;
+                    var toVal = val.to;
 
- 					//user picked out of range swap it for them
- 					if(fromVal && toVal && fromVal > toVal) {
- 						var temp = toVal;
- 						toVal = fromVal;
- 						fromVal = temp;
- 					}
+                    //user picked out of range swap it for them
+                    if(fromVal && toVal && fromVal > toVal) {
+                        var temp = toVal;
+                        toVal = fromVal;
+                        fromVal = temp;
+                    }
 
- 					if(!that.options.allowOpenEnd) {
-						if(fromVal && !toVal) {
-			 				toVal = fromVal;
-			 			}
-			 			if(toVal && !fromVal) {
-			 				fromVal = toVal;
-			 			}
- 					}
+                    if(!that.options.allowOpenEnd) {
+                        if(fromVal && !toVal) {
+                            toVal = fromVal;
+                        }
+                        if(toVal && !fromVal) {
+                            fromVal = toVal;
+                        }
+                    }
 
-	     			that._setValue({from:fromVal, to:toVal});
+                    that._setValue({from:fromVal, to:toVal});
 
-	     			//fire it here since we might be reseting the values
-	     			that.trigger(CHANGE);
-	        	};
+                    //fire it here since we might be reseting the values
+                    that.trigger(CHANGE);
+                };
 
-	           	var fromOpts = $.extend({}, that.options.fromPickerOptions, that.options.defaultPickerOptions);
-	           	var toOpts = $.extend({}, that.options.toPickerOptions, that.options.defaultPickerOptions);
+                var fromOpts = $.extend({}, that.options.fromPickerOptions, that.options.defaultPickerOptions);
+                var toOpts = $.extend({}, that.options.toPickerOptions, that.options.defaultPickerOptions);
 
-	           	toOpts = $.extend({change:changeHandler}, toOpts);
-	           	fromOpts = $.extend({change:changeHandler}, fromOpts);
+                toOpts = $.extend({change:changeHandler}, toOpts);
+                fromOpts = $.extend({change:changeHandler}, fromOpts);
 
-	           	var inputType = that.settings.type;
+                var inputType = that.settings.type;
 
- 				that._from = from[inputType](fromOpts).data(inputType);
-	            that._to = to[inputType](toOpts).data(inputType);
+                that._from = from[inputType](fromOpts).data(inputType);
+                that._to = to[inputType](toOpts).data(inputType);
 
-	            that._value = that.value();
-	            
-	    	},
-	    	settings : {
-		        template : "<input/>",
-		        type : "kendoDatePicker"
-	    	},
-	    	options : {
-		        name: "RangePicker",
-		        seperator: " - ",
-		        defaultPickerOptions: {},
-		        fromPickerOptions: {},
-		        toPickerOptions: {},
-	        	allowOpenEnd : true
-		    },
-		    events : [
-		        CHANGE
-		    ],
-		    _getValue:function() {
-		    	var that = this;
+                that._value = that.value();
+                
+            },
+            settings : {
+                template : "<input/>",
+                type : "kendoDatePicker"
+            },
+            options : {
+                name: "RangePicker",
+                seperator: " - ",
+                defaultPickerOptions: {},
+                fromPickerOptions: {},
+                toPickerOptions: {},
+                allowOpenEnd : true
+            },
+            events : [
+                CHANGE
+            ],
+            _getValue:function() {
+                var that = this;
 
-	    		return {
-	    			from : that._from.value(),
-					to : that._to.value()
-	    		};
-		    },
-		    _setValue : function(val) {
-		    	var that = this;
-		    	
-		    	var current = that._getValue();
+                return {
+                    from : that._from.value(),
+                    to : that._to.value()
+                };
+            },
+            _setValue : function(val) {
+                var that = this;
+                
+                var current = that._getValue();
 
-		    	 if(+val.to != +current.to || +val.from != +current.from ) { 
-			    	if(val) {
-					    that._from.value(val.from);
-					   	that._to.value(val.to);
-			    	}
-			    	else {
-			    		that._from.value("");
-			    		that._to.value("");
-					}
+                 if(+val.to != +current.to || +val.from != +current.from ) { 
+                    if(val) {
+                        that._from.value(val.from);
+                        that._to.value(val.to);
+                    }
+                    else {
+                        that._from.value("");
+                        that._to.value("");
+                    }
 
-		            that.trigger(CHANGE);
-		        }
-		    },
-		    value : function(val){
-		    	var that = this;
-		    	if(val) {
-		    		that._setValue(val);
-		    	} else {
-		    		return that._getValue();
-		    	}
-		    }	
+                    that.trigger(CHANGE);
+                }
+            },
+            value : function(val){
+                var that = this;
+                if(val) {
+                    that._setValue(val);
+                } else {
+                    return that._getValue();
+                }
+            }   
     });
 
  ui.plugin(RangePicker);
@@ -613,7 +613,10 @@ var ExtDropDown = Widget.extend({
                                                                                                that._widget.select ? that._widget.select() : "";
                      
                 }
-                  that._widget.value ? that._widget.value(val) : that._widget.select ? that._widget.select(val) : "";
+
+                return that._widget.value ? that._widget.value(val) : 
+                                        that._widget.select ? that._widget.select(val) : 
+                                                              $.noop();
             }
         });
 
@@ -639,8 +642,8 @@ var ExtDropDown = Widget.extend({
                                                     });
     ui.plugin(ExtDropDownDateRangePicker);
 
-    var ExtDropDownCalendarRangePicker = Widget.extend({	
-    														_type: "kendoCalendarRangePicker",
+    var ExtDropDownCalendarRangePicker = Widget.extend({    
+                                                            _type: "kendoCalendarRangePicker",
                                                             init: function(element, options) {
                                                                 Widget.fn.init.call(this, element, options);
                                                             },
@@ -686,118 +689,118 @@ var ExtDropDown = Widget.extend({
 
     var CalendarRangePicker = Widget.extend({
 
-		init: function(element, options) {
+        init: function(element, options) {
 
-		  	var that = this;
+            var that = this;
 
-		 	// base call to initialize widget
-		 	Widget.fn.init.call(that, element, options);
+            // base call to initialize widget
+            Widget.fn.init.call(that, element, options);
 
-		 	//bind to the change handlers to force a redraw
-		 	that._from.bind("change", 
-		 		function(e) {
-		 			that._update();
-		 		});
+            //bind to the change handlers to force a redraw
+            that._from.bind("change", 
+                function(e) {
+                    that._update();
+                });
 
-		 	that._to.bind("change", 
-		 		function(e) {
-		 			that._update();
-		 		});
+            that._to.bind("change", 
+                function(e) {
+                    that._update();
+                });
 
-		 	//handle custom style for days between selected dates
-			var defaultFromContent = that._from.month.content;
-			var defaultToContent = that._to.month.content;
-		 	that._from.month.content = function(data) {
-		 		if(that._to.value() && that._from.value() && data && data.date > that._from.value() && data.date <= that._to.value()) {
-		 			return that._customStyle(data);
-		 		}
-		 		return defaultFromContent(data);
-		 	};
+            //handle custom style for days between selected dates
+            var defaultFromContent = that._from.month.content;
+            var defaultToContent = that._to.month.content;
+            that._from.month.content = function(data) {
+                if(that._to.value() && that._from.value() && data && data.date > that._from.value() && data.date <= that._to.value()) {
+                    return that._customStyle(data);
+                }
+                return defaultFromContent(data);
+            };
 
-		 	that._to.month.content = function(data) {
-		 		if(that._to.value() && that._from.value() && data && data.date >= that._from.value() && data.date < that._to.value()) {
-		 		
-		 			return that._customStyle(data);
-		 		}
-		 		return defaultFromContent(data);
-		 	};
-		},
-		_setValue : function(val) {
-		 	Widget.fn._setValue.call(this, val);
-		 	this._update();
-		},
-		_update : function() {
-			var that = this;
+            that._to.month.content = function(data) {
+                if(that._to.value() && that._from.value() && data && data.date >= that._from.value() && data.date < that._to.value()) {
+                
+                    return that._customStyle(data);
+                }
+                return defaultFromContent(data);
+            };
+        },
+        _setValue : function(val) {
+            Widget.fn._setValue.call(this, val);
+            this._update();
+        },
+        _update : function() {
+            var that = this;
 
-			//temporarily disable nav settings while redrawing the selection 
-		 	var tempFromAnimation = that._from.options.animation;
-		 	var tempToAnimation = that._to.options.animation;
+            //temporarily disable nav settings while redrawing the selection 
+            var tempFromAnimation = that._from.options.animation;
+            var tempToAnimation = that._to.options.animation;
 
-		 	that._from.options.animation = false;
-		 	that._to.options.animation = false;
+            that._from.options.animation = false;
+            that._to.options.animation = false;
 
-		 	that._from.navigate();
-		 	that._to.navigate();
+            that._from.navigate();
+            that._to.navigate();
 
-		 	//return animation settings
-		 	that._from.options.animation = tempFromAnimation;
-		 	that._to.options.animation = tempToAnimation;
-		},
-		_customStyle : function(data) {
-			var that = this;
-			var template,
-				css = ' class="' + that.options.inRangeClass + ' "';
-			if(data.cssClass) {
-				//inject our class if there are already styles
-				css = data.cssClass.replace('class=\"', css);
-			}
-			template ='<td'+(css)+' role="gridcell"><a tabindex="-1" class="k-link'+(data.linkClass)+'" href="'+(data.url)+'" data-value="'+(data.dateString)+'" title="'+(data.title)+'">'+(data.value)+'</a></td>';
-			return template;
-		},
-		settings : {
-		    template : "<div style=\"height:227px\"/>",
-	        type:"kendoCalendar"
-	    },
-    	options: {
-	        name: "CalendarRangePicker",
-	        seperator: " ",
-	        inRangeClass: "k-state-in-range"
-	    }
+            //return animation settings
+            that._from.options.animation = tempFromAnimation;
+            that._to.options.animation = tempToAnimation;
+        },
+        _customStyle : function(data) {
+            var that = this;
+            var template,
+                css = ' class="' + that.options.inRangeClass + ' "';
+            if(data.cssClass) {
+                //inject our class if there are already styles
+                css = data.cssClass.replace('class=\"', css);
+            }
+            template ='<td'+(css)+' role="gridcell"><a tabindex="-1" class="k-link'+(data.linkClass)+'" href="'+(data.url)+'" data-value="'+(data.dateString)+'" title="'+(data.title)+'">'+(data.value)+'</a></td>';
+            return template;
+        },
+        settings : {
+            template : "<div style=\"height:227px\"/>",
+            type:"kendoCalendar"
+        },
+        options: {
+            name: "CalendarRangePicker",
+            seperator: " ",
+            inRangeClass: "k-state-in-range"
+        }
     });
 
- 	ui.plugin(CalendarRangePicker);
+    ui.plugin(CalendarRangePicker);
 
-	var NumericRangePicker = Widget.extend({
+    var NumericRangePicker = Widget.extend({
 
-		init: function(element, options) {
-		 	// base call to initialize widget
-		 	Widget.fn.init.call(this, element, options);
-		},
-		settings : {
-		    template : "<input/>",
-	        type:"kendoNumericTextBox"
-	    },
-    	options: {
-	        name: "NumericRangePicker"
-	    }
+        init: function(element, options) {
+            // base call to initialize widget
+            Widget.fn.init.call(this, element, options);
+        },
+        settings : {
+            template : "<input/>",
+            type:"kendoNumericTextBox"
+        },
+        options: {
+            name: "NumericRangePicker"
+        }
     });
 
- 	ui.plugin(NumericRangePicker);
+    ui.plugin(NumericRangePicker);
 
- 	var DateRangePicker = Widget.extend({
+    var DateRangePicker = Widget.extend({
 
-		init: function(element, options) {
-		 	// base call to initialize widget
-		 	Widget.fn.init.call(this, element, options);
-		},
-		settings : {
-		    template : "<input/>",
-	        type:"kendoDatePicker"
-	    },
-    	options: {
-	        name: "DateRangePicker"
-	    }
+        init: function(element, options) {
+            // base call to initialize widget
+            Widget.fn.init.call(this, element, options);
+        },
+        settings : {
+            template : "<input/>",
+            type:"kendoDatePicker"
+        },
+        options: {
+            name: "DateRangePicker"
+        }
     });
 
- 	ui.plugin(DateRangePicker);
+    ui.plugin(DateRangePicker);
 })(jQuery);;

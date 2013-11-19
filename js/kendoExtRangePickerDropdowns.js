@@ -18,8 +18,8 @@ require("kendoExtDropDownRangePicker");
                                                     });
     ui.plugin(ExtDropDownDateRangePicker);
 
-    var ExtDropDownCalendarRangePicker = Widget.extend({	
-    														_type: "kendoCalendarRangePicker",
+    var ExtDropDownCalendarRangePicker = Widget.extend({    
+                                                            _type: "kendoCalendarRangePicker",
                                                             init: function(element, options) {
                                                                 Widget.fn.init.call(this, element, options);
                                                             },
