@@ -22,7 +22,7 @@ test( "Numeric Range Picker Can Be Created", function() {
   var kendoObj = el.data('kendoNumericRangePicker');
   ok( kendoObj !== undefined, "Kendo data Object Returned");
   ok( el.attr("id") === "extDD", "Element returned" );
-});
+});  
 
 test( "Calendar Range Picker Can Be Created", function() {
   var el = $("<div id='extDD'/>").kendoCalendarRangePicker();
