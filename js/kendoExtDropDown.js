@@ -1,12 +1,13 @@
-(/// <author>Joshua Holt</author>
-    function(kendo, $) {
+
+/// <author>Joshua Holt</author>
+(function(kendo, $) {
     // shorten references to variables. this is better for uglification
     var ui = kendo.ui,
         Widget = ui.Widget,
         INIT = "init",
         OPEN = "open",
         CLOSE = "close",    
-        CHANGE = "change"    
+        CHANGE = "change" ;   
 
 var ExtDropDown = Widget.extend({
         _visibleClass: 'k-custom-visible',

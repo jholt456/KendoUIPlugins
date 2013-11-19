@@ -1,3 +1,5 @@
+require("kendoExtDropDownRangePicker");
+
 /// <author>Joshua Holt</author>
 (function(kendo, $) {
     // shorten references to variables. this is better for uglification
@@ -28,7 +30,7 @@
                                                         });
     ui.plugin(ExtDropDownCalendarRangePicker);
 
-    var ExtDropDownCalendarRangePicker = Widget.extend({
+    var ExtDropDownNumericRangePicker = Widget.extend({
                                                             _type: "kendoNumericRangePicker",
                                                             init: function(element, options) {
                                                                 Widget.fn.init.call(this, element, options);
@@ -37,18 +39,18 @@
                                                                 name: "ExtDropDownNumericRangePicker"
                                                             }
                                                         });
-    ui.plugin(ExtDropDownCalendarRangePicker);
+    ui.plugin(ExtDropDownNumericRangePicker);
 
-    var ExtDropDownGoogleDateRangePicker = Widget.extend({
-                                                            _type: "kendoNumericRangePicker",
-                                                            init: function(element, options) {
-                                                                Widget.fn.init.call(this, element, options);
-                                                            },
-                                                            options: {
-                                                                name: "ExtDropDownGoogleDateRangePicker",
-                                                                format: "M/d/yyyy"
-                                                            }
-                                                        });
-    ui.plugin(ExtDropDownGoogleDateRangePicker);
+    // var ExtDropDownGoogleDateRangePicker = Widget.extend({
+    //                                                         _type: "kendoNumericRangePicker",
+    //                                                         init: function(element, options) {
+    //                                                             Widget.fn.init.call(this, element, options);
+    //                                                         },
+    //                                                         options: {
+    //                                                             name: "ExtDropDownGoogleDateRangePicker",
+    //                                                             format: "M/d/yyyy"
+    //                                                         }
+    //                                                     });
+    // ui.plugin(ExtDropDownGoogleDateRangePicker);
 
 })(window.kendo, window.kendo.jQuery);

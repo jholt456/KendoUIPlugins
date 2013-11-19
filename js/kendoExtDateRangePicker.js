@@ -1,3 +1,5 @@
+require('kendoExtDropDownRangePicker');
+
 /// <author>Joshua Holt</author>
 (function(kendo, $) {
     // shorten references to variables. this is better for uglification
@@ -50,7 +52,7 @@
 
                 cancel.text("Cancel").addClass("k-button")
                                      .css({"position":"absolute", "bottom": "5px", "right":"5px" })
-                                     .addClass("btn-secondary")
+                                     .addClass("btn-secondary");
 
                 cancel.on("click", function() {
                     that._calendarRange._setValue(that._value);
@@ -73,18 +75,19 @@
 
                 if(that.options.ranges && that.options.ranges.length > 0) {
                     var ranges = $("<div/>");
-                    for(var rangeIdx = 0; rangeIdx < that.options.ranges.length; rangeIdx++) {
-                        var current = that.options.ranges[rangeIdx];
-                        var rangeBtn = $("<button>").addClass("btn range").data("range-idx", rangeIdx);
-                        rangeBtn.text(current.text || "");
-                        rangeBtn.on("click", function() {
+                    var handler = function() {
                             var range = that.options.ranges[$(this).data("range-idx")].value;
 
                             var from = range.from && that._isFunction(range.from) ? range.from() : range.from;
                             var to = range.to && that._isFunction(range.to) ? range.to() : range.to;
                            
                             that.value({from:from, to:to});
-                        });
+                        };
+                    for(var rangeIdx = 0; rangeIdx < that.options.ranges.length; rangeIdx++) {
+                        var current = that.options.ranges[rangeIdx];
+                        var rangeBtn = $("<button>").addClass("btn range").data("range-idx", rangeIdx);
+                        rangeBtn.text(current.text || "");
+                        rangeBtn.on("click", handler);
                         ranges.append(rangeBtn);
                     }
                     left.append(ranges);

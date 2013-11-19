@@ -1,5 +1,7 @@
-(/// <author>Joshua Holt</author>
-	function($) {
+require("kendoExtRangePicker");
+/// <author>Joshua Holt</author>
+
+(function($) {
     
     var kendo = window.kendo,
         ui = kendo.ui,

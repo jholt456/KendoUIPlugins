@@ -1,3 +1,6 @@
+require('kendoExtDropDown');
+require('kendoExtRangePicker');
+
 /// <author>Joshua Holt</author>
 (function(kendo, $) {
     // shorten references to variables. this is better for uglification
@@ -30,12 +33,12 @@
                 that._rangePicker.bind(CHANGE, function() {
                     //change only the temp value while the user is in the dialog
                     that._tempVal = that._rangePicker.value();
-                })
+                });
 
                 that.content(that._rangePicker.element);
 
                 that._value = that.value();
-                that._tempVal = that._value
+                that._tempVal = that._value;
             },
             _checkChange:function() {
                 var that = this;

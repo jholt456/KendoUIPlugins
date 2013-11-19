@@ -1,3 +1,5 @@
+require("kendoExtDropDown");
+
 /// <author>Joshua Holt</author>
 (function(kendo, $) {
     // shorten references to variables. this is better for uglification
@@ -50,7 +52,7 @@
                 that.content(that._widget.element);
 
                 that._value = that.value();
-                that._tempVal = that._value
+                that._tempVal = that._value;
             },
             _isFunction : function(functionToCheck) {
              var getType = {};
