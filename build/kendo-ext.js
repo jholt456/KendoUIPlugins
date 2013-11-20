@@ -758,7 +758,7 @@ var ExtDropDown = Widget.extend({
             return template;
         },
         settings : {
-            template : "<div style=\"height:227px\"/>",
+            template : "<div />",
             type:"kendoCalendar"
         },
         options: {
