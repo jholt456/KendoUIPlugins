@@ -101,22 +101,34 @@
                 
                 var current = that._getValue();
 
-                 if(+val.to != +current.to || +val.from != +current.from ) { 
-                    if(val) {
-                        that._from.value(val.from);
-                        that._to.value(val.to);
-                    }
-                    else {
-                        that._from.value("");
-                        that._to.value("");
-                    }
-
+                if(!val && !current) {
+                    return; //no change
+                }
+                else if(!val && current) {
+                    that._from.value("");
+                    that._to.value("");
                     that.trigger(CHANGE);
                 }
+                else if(val && !current || +val.to != +current.to || +val.from != +current.from ){
+                    that._from.value(val.from);
+                    that._to.value(val.to);
+                    that.trigger(CHANGE);
+                }
+                // else if() { 
+                //    // if(val) {
+                //     that._from.value(val.from);
+                //     that._to.value(val.to);
+                //     that.trigger(CHANGE);
+                //     //}
+                //     //else {
+                //       //  that._from.value("");
+                //         //that._to.value("");
+                //     //}
+                // }
             },
             value : function(val){
                 var that = this;
-                if(val) {
+                if(arguments.length > 0) {
                     that._setValue(val);
                 } else {
                     return that._getValue();

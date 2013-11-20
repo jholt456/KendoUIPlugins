@@ -8,7 +8,7 @@
     <link rel="stylesheet" type="text/css" href="styles/kendo.ext.css">
 
     <script type="text/javascript" src="http://cdn.kendostatic.com/2013.2.918/js/kendo.all.min.js"></script>
-    <script type="text/javascript" src="build/kendo-ext-min.js"></script>
+    <script type="text/javascript" src="build/kendo-ext.js"></script>
    
    <!--<script type="text/javascript" src="js/kendoExtDropDown.js"></script>
    <script type="text/javascript" src="js/kendoExtDropDownKendoWidget.js"></script>
@@ -63,7 +63,7 @@
 			<div id="dropDownDateRange"></div>
 			<div id="dropDownDateContent"></div>
 
-			<h3>Date Range Picker Dropdown</h3>
+			<h3>Calendar Range Picker Dropdown</h3>
 			<div id="dropDownCalendarRange"></div>
 			<div id="dropDownCalendarContent"></div>
 
@@ -130,7 +130,16 @@
 			$("#dropDownDatePicker").kendoExtDropDownDateRangePicker({change:changed});
 			$("#dropDownCalendarPicker").kendoExtDropDownCalendarRangePicker({change:changed});
 			$("#dropDownNumericPicker").kendoExtDropDownNumericRangePicker({change:changed});
-			$("#dropDownGoogleStylePicker").kendoExtDateRangePicker({change:changed, ranges:[
+			$("#dropDownGoogleStylePicker").kendoExtDateRangePicker({change:changed, pickerOptions: {
+	                    fromPickerOptions : {
+	                        value: today
+	                    },
+	                    toPickerOptions : {
+	                        value: future
+	                    },
+	                    allowOpenEnd:false
+                	}, 
+                	ranges:[
 					{
 						text :"Past 90 Days",
 						value : {

@@ -36,20 +36,24 @@ var ExtDropDown = Widget.extend({
             that.content(that.options.content);
             that._element = $(element);
 
-            that._element.append(kendo.format("<input id='extDropDown{0}' class='k-ext-dropdown'/>", that._uid));
+            //create drop down place holder
+            var ddPlaceHolder = $(kendo.format("<input id='extDropDown{0}' class='k-ext-dropdown'/>", that._uid));
+            that._element.append(ddPlaceHolder);
 
             // Append the html to the "root" element for the DropDownList .
             that._element.append(that._contentWrapper);
 
             // Create the DropDownList.
-            that._dropdown = $(kendo.format("#extDropDown{0}", that._uid)).kendoDropDownList({
+            that._dropdown = ddPlaceHolder.kendoDropDownList({
                 dataSource: [{ text: "", value: "" }],
                 dataTextField: "text",
                 dataValueField: "value",
                 open: function (e) {
                     //to prevent the dropdown from opening or closing.
                     e.preventDefault();
-                    that.open(e);
+                    if(!that.isOpen()) {
+                        that.open(e);
+                    }
                 }
             }).data("kendoDropDownList");
 
@@ -68,10 +72,11 @@ var ExtDropDown = Widget.extend({
                          e.stopPropagation();
                     });
 
+            //that._updateText();
             that.trigger(INIT);
         },
         formatDisplayText : function() {
-            return this.value();
+            return this.value() || "";
         },
         dropDownList: function () {
             /// <summary>
@@ -80,11 +85,31 @@ var ExtDropDown = Widget.extend({
 
             return this._dropdown;
         },
+        _updateText:function() {
+            var that = this;
+            that._dropdown.text(that.options.displayFormatter ? that.options.displayFormatter() : that.formatDisplayText());
+        },
+        isOpen:function() {
+            return this._contentWrapper.hasClass(this._visibleClass);
+        },
+        _opened:function(e) {
+            var that = this,
+                wrapper = that._contentWrapper;
+
+            that._dropdown.close();
+
+            wrapper.addClass(that._visibleClass);
+            $(document).on('mousedown', $.proxy(that.close, that));
+            
+            that.trigger(OPEN);
+        },
         open : function(e) {
             var that = this;
 
-            //to prevent the dropdown from opening or closing.
-            e.preventDefault();
+            if(e) {
+                //to prevent the dropdown from opening or closing.
+                e.preventDefault();
+            }
 
             var wrapper = that._contentWrapper;
             if (!wrapper.hasClass(that._visibleClass)) {
@@ -98,14 +123,18 @@ var ExtDropDown = Widget.extend({
                     "left": $dropdownRootElem.position().left
                 });
                
-                wrapper.slideToggle('fast', function () {
-                    that._dropdown.close();
-                    wrapper.addClass(that._visibleClass);
-               
-                    $(document).on('mousedown', $.proxy(that.close, that));
-                    that.trigger(OPEN);
-                });
+                wrapper.slideToggle('fast', $.proxy(that._opened, that));
             }
+        },
+        _closed:function(e) {
+             var that = this,
+                  wrapper = that._contentWrapper;
+            wrapper.removeClass(that._visibleClass);
+             
+             $(document).off('mousedown', this.close);
+             that._updateText();
+            
+             that.trigger(CLOSE);
         },
         close: function(e) {
             var that = this;
@@ -114,25 +143,20 @@ var ExtDropDown = Widget.extend({
 
             if (wrapper.hasClass(that._visibleClass)) {
                 
-                wrapper.slideToggle('fast', function () {
-                        wrapper.removeClass(that._visibleClass);
-                        
-                        $(document).off('mousedown', this.close);
-                        that._dropdown.text(that.options.displayFormatter ? that.options.displayFormatter() : that.formatDisplayText());
-                        that.trigger(CLOSE);
-                    });
+                wrapper.slideToggle('fast', $.proxy(that._closed, that));
             }
         },
         value: function(val) {
+
             var that = this;
 
-            var result =  that.options.valueProvider ? that.options.valueProvider(val) : undefined;
-            return result;
-
+            //if(arguments.length === 0) {
+                return that.options.valueProvider ? that.options.valueProvider(val) : undefined;
+            //}
         },
         content: function (newContent) {
             var that = this;
-            if(newContent) {
+            if(arguments.length > 0) {
                 that._contentWrapper.empty(); //probably need to do some tear down
                 that._content = newContent;
                 that._contentWrapper.append(that._content);
@@ -276,22 +300,34 @@ var ExtDropDown = Widget.extend({
                 
                 var current = that._getValue();
 
-                 if(+val.to != +current.to || +val.from != +current.from ) { 
-                    if(val) {
-                        that._from.value(val.from);
-                        that._to.value(val.to);
-                    }
-                    else {
-                        that._from.value("");
-                        that._to.value("");
-                    }
-
+                if(!val && !current) {
+                    return; //no change
+                }
+                else if(!val && current) {
+                    that._from.value("");
+                    that._to.value("");
                     that.trigger(CHANGE);
                 }
+                else if(val && !current || +val.to != +current.to || +val.from != +current.from ){
+                    that._from.value(val.from);
+                    that._to.value(val.to);
+                    that.trigger(CHANGE);
+                }
+                // else if() { 
+                //    // if(val) {
+                //     that._from.value(val.from);
+                //     that._to.value(val.to);
+                //     that.trigger(CHANGE);
+                //     //}
+                //     //else {
+                //       //  that._from.value("");
+                //         //that._to.value("");
+                //     //}
+                // }
             },
             value : function(val){
                 var that = this;
-                if(val) {
+                if(arguments.length > 0) {
                     that._setValue(val);
                 } else {
                     return that._getValue();
@@ -307,14 +343,15 @@ var ExtDropDown = Widget.extend({
     // shorten references to variables. this is better for uglification
      var ui = kendo.ui,
         Widget = ui.ExtDropDown;
-        CHANGE = "change";
+        CHANGE = "change",
+        SELECT = "select";
 
         var ExtDropDownRangePicker = Widget.extend({
             _uid: null,
             _rangePicker: null,
             _type:"kendoNumericRangePicker",
-            _tempVal:null,
             _value:null,
+            _oldValue:null,
             init: function(element, options) {
 
                 var that = this;
@@ -332,31 +369,67 @@ var ExtDropDown = Widget.extend({
                                         .data(that._type);
 
                 that._rangePicker.bind(CHANGE, function() {
-                    //change only the temp value while the user is in the dialog
-                    that._tempVal = that._rangePicker.value();
+                    //change only the value while the user is in the dialog
+                    that._value = that._rangePicker.value();
+
+                    //if the drop down is not expanded, we will go ahead an check for changes when the picker changes
+                   // that._checkChange();
+                    
                 });
 
                 that.content(that._rangePicker.element);
 
                 that._value = that.value();
-                that._tempVal = that._value;
+                that._oldValue = that._value;
+                that._updateText();
+            },
+            _setValue:function( val) {
+                 var that = this,
+                     picker = that._rangePicker;
+
+                if(arguments.length > 0 && picker) {
+                    picker.value(val);
+                    that._checkChange();
+                }
+            },
+            _getValue:function() {
+                 var that = this;
+                return that._rangePicker ? that._rangePicker.value() : undefined;
             },
             _checkChange:function() {
                 var that = this;
-                var temp = that._tempVal;
+                var oldValue = that._oldValue;
                 var current = that._value;
 
-                if(+temp.to != +current.to || +temp.from != +current.from ) { 
-                    that.trigger(CHANGE);
-                }
+                //this prevents a race issue between the drop down closing, and the range picker's value changing - only fire triggers if the dd is closed
+                //if(!that.isOpen()){
+                    // if(!current && !oldValue || 
+                    //     (current && oldValue && +oldValue.to == +current.to && +oldValue.from == +current.from ) ||
+                    //     (current && !oldValue && !current.to && !current.from) || null from/to on new value means no value
+                    //     (!current && oldValue && !oldValue.to && !oldValue.from)) /*null from/to on old value means no value*/{
+                    //     return; //no change
+                    // }
+                    // else 
+                        if((!current && oldValue && (oldValue.to || oldValue.from)) || 
+                            (current && !oldValue && (current.to || current.from)) || 
+                            (current && oldValue && (+oldValue.to != +current.to || +oldValue.from != +current.from))) {
+                        that._oldValue = that._value;
+                        that.trigger(CHANGE);
+                    }
+                //}
             },
-            close : function(e) {
+            _closed : function(e) {
 
                 var that = this;
 
-                Widget.fn.close.call(that, e);
+                Widget.fn._closed.call(that, e);
 
                 that._checkChange();
+            },
+            close : function(e) {
+                var that = this;
+
+                Widget.fn.close.call(that, e);
             },
             open : function(e) {
 
@@ -364,7 +437,8 @@ var ExtDropDown = Widget.extend({
 
                 Widget.fn.open.call(that, e);
 
-                that._tempVal = that._value;
+                //capture current value
+                that._oldValue = that._value;
             },
             formatDisplayText : function () {
                 var that = this;
@@ -403,8 +477,15 @@ var ExtDropDown = Widget.extend({
                 CHANGE
             ],
             value : function(val) {
+
                 var that = this;
-                return that._rangePicker.value(val);
+
+                if(arguments.length > 0) {
+                    that._setValue(val);
+                }
+                else {
+                    return that._getValue();
+                }
             }
         });
 
@@ -447,12 +528,12 @@ var ExtDropDown = Widget.extend({
 
                 that._rangePicker.bind(CHANGE, function(e) {
                     that._calendarRange.value(e.sender.value());
-                    that._tempValue = e.sender.value();
+                    that._value = e.sender.value();
                 });
 
                 that._calendarRange.bind(CHANGE, function(e) {
                     that._rangePicker.value(e.sender.value());
-                    that._tempValue = e.sender.value();
+                    that._value = e.sender.value();
                 });
 
                 var accept = $("<button>");
@@ -467,14 +548,13 @@ var ExtDropDown = Widget.extend({
                                      .addClass("btn-secondary");
 
                 cancel.on("click", function() {
-                    that._calendarRange._setValue(that._value);
-                    that._rangePicker._setValue(that._value);
+                    that._calendarRange._setValue(that._oldValue);
+                    that._rangePicker._setValue(that._oldValue);
                     that.close();
                 });
 
 
                 accept.on("click", function() {
-                   that._value = that._rangePicker.value();
                    that.close();
                 });
 
@@ -493,7 +573,7 @@ var ExtDropDown = Widget.extend({
                             var from = range.from && that._isFunction(range.from) ? range.from() : range.from;
                             var to = range.to && that._isFunction(range.to) ? range.to() : range.to;
                            
-                            that.value({from:from, to:to});
+                            that._rangePicker.value({from:from, to:to});
                         };
                     for(var rangeIdx = 0; rangeIdx < that.options.ranges.length; rangeIdx++) {
                         var current = that.options.ranges[rangeIdx];
@@ -513,6 +593,8 @@ var ExtDropDown = Widget.extend({
                 left.append(cancel);
 
                 that._value = that.value();
+                that._oldValue = that._value;
+                that._updateText();
             },
             events:[
                 CHANGE

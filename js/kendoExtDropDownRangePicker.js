@@ -6,14 +6,15 @@ require('kendoExtRangePicker');
     // shorten references to variables. this is better for uglification
      var ui = kendo.ui,
         Widget = ui.ExtDropDown;
-        CHANGE = "change";
+        CHANGE = "change",
+        SELECT = "select";
 
         var ExtDropDownRangePicker = Widget.extend({
             _uid: null,
             _rangePicker: null,
             _type:"kendoNumericRangePicker",
-            _tempVal:null,
             _value:null,
+            _oldValue:null,
             init: function(element, options) {
 
                 var that = this;
@@ -31,31 +32,67 @@ require('kendoExtRangePicker');
                                         .data(that._type);
 
                 that._rangePicker.bind(CHANGE, function() {
-                    //change only the temp value while the user is in the dialog
-                    that._tempVal = that._rangePicker.value();
+                    //change only the value while the user is in the dialog
+                    that._value = that._rangePicker.value();
+
+                    //if the drop down is not expanded, we will go ahead an check for changes when the picker changes
+                   // that._checkChange();
+                    
                 });
 
                 that.content(that._rangePicker.element);
 
                 that._value = that.value();
-                that._tempVal = that._value;
+                that._oldValue = that._value;
+                that._updateText();
+            },
+            _setValue:function( val) {
+                 var that = this,
+                     picker = that._rangePicker;
+
+                if(arguments.length > 0 && picker) {
+                    picker.value(val);
+                    that._checkChange();
+                }
+            },
+            _getValue:function() {
+                 var that = this;
+                return that._rangePicker ? that._rangePicker.value() : undefined;
             },
             _checkChange:function() {
                 var that = this;
-                var temp = that._tempVal;
+                var oldValue = that._oldValue;
                 var current = that._value;
 
-                if(+temp.to != +current.to || +temp.from != +current.from ) { 
-                    that.trigger(CHANGE);
-                }
+                //this prevents a race issue between the drop down closing, and the range picker's value changing - only fire triggers if the dd is closed
+                //if(!that.isOpen()){
+                    // if(!current && !oldValue || 
+                    //     (current && oldValue && +oldValue.to == +current.to && +oldValue.from == +current.from ) ||
+                    //     (current && !oldValue && !current.to && !current.from) || null from/to on new value means no value
+                    //     (!current && oldValue && !oldValue.to && !oldValue.from)) /*null from/to on old value means no value*/{
+                    //     return; //no change
+                    // }
+                    // else 
+                        if((!current && oldValue && (oldValue.to || oldValue.from)) || 
+                            (current && !oldValue && (current.to || current.from)) || 
+                            (current && oldValue && (+oldValue.to != +current.to || +oldValue.from != +current.from))) {
+                        that._oldValue = that._value;
+                        that.trigger(CHANGE);
+                    }
+                //}
             },
-            close : function(e) {
+            _closed : function(e) {
 
                 var that = this;
 
-                Widget.fn.close.call(that, e);
+                Widget.fn._closed.call(that, e);
 
                 that._checkChange();
+            },
+            close : function(e) {
+                var that = this;
+
+                Widget.fn.close.call(that, e);
             },
             open : function(e) {
 
@@ -63,7 +100,8 @@ require('kendoExtRangePicker');
 
                 Widget.fn.open.call(that, e);
 
-                that._tempVal = that._value;
+                //capture current value
+                that._oldValue = that._value;
             },
             formatDisplayText : function () {
                 var that = this;
@@ -102,8 +140,15 @@ require('kendoExtRangePicker');
                 CHANGE
             ],
             value : function(val) {
+
                 var that = this;
-                return that._rangePicker.value(val);
+
+                if(arguments.length > 0) {
+                    that._setValue(val);
+                }
+                else {
+                    return that._getValue();
+                }
             }
         });
 

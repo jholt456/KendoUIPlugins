@@ -35,12 +35,12 @@ require('kendoExtDropDownRangePicker');
 
                 that._rangePicker.bind(CHANGE, function(e) {
                     that._calendarRange.value(e.sender.value());
-                    that._tempValue = e.sender.value();
+                    that._value = e.sender.value();
                 });
 
                 that._calendarRange.bind(CHANGE, function(e) {
                     that._rangePicker.value(e.sender.value());
-                    that._tempValue = e.sender.value();
+                    that._value = e.sender.value();
                 });
 
                 var accept = $("<button>");
@@ -55,14 +55,13 @@ require('kendoExtDropDownRangePicker');
                                      .addClass("btn-secondary");
 
                 cancel.on("click", function() {
-                    that._calendarRange._setValue(that._value);
-                    that._rangePicker._setValue(that._value);
+                    that._calendarRange._setValue(that._oldValue);
+                    that._rangePicker._setValue(that._oldValue);
                     that.close();
                 });
 
 
                 accept.on("click", function() {
-                   that._value = that._rangePicker.value();
                    that.close();
                 });
 
@@ -81,7 +80,7 @@ require('kendoExtDropDownRangePicker');
                             var from = range.from && that._isFunction(range.from) ? range.from() : range.from;
                             var to = range.to && that._isFunction(range.to) ? range.to() : range.to;
                            
-                            that.value({from:from, to:to});
+                            that._rangePicker.value({from:from, to:to});
                         };
                     for(var rangeIdx = 0; rangeIdx < that.options.ranges.length; rangeIdx++) {
                         var current = that.options.ranges[rangeIdx];
@@ -101,6 +100,8 @@ require('kendoExtDropDownRangePicker');
                 left.append(cancel);
 
                 that._value = that.value();
+                that._oldValue = that._value;
+                that._updateText();
             },
             events:[
                 CHANGE

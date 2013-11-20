@@ -36,20 +36,24 @@ var ExtDropDown = Widget.extend({
             that.content(that.options.content);
             that._element = $(element);
 
-            that._element.append(kendo.format("<input id='extDropDown{0}' class='k-ext-dropdown'/>", that._uid));
+            //create drop down place holder
+            var ddPlaceHolder = $(kendo.format("<input id='extDropDown{0}' class='k-ext-dropdown'/>", that._uid));
+            that._element.append(ddPlaceHolder);
 
             // Append the html to the "root" element for the DropDownList .
             that._element.append(that._contentWrapper);
 
             // Create the DropDownList.
-            that._dropdown = $(kendo.format("#extDropDown{0}", that._uid)).kendoDropDownList({
+            that._dropdown = ddPlaceHolder.kendoDropDownList({
                 dataSource: [{ text: "", value: "" }],
                 dataTextField: "text",
                 dataValueField: "value",
                 open: function (e) {
                     //to prevent the dropdown from opening or closing.
                     e.preventDefault();
-                    that.open(e);
+                    if(!that.isOpen()) {
+                        that.open(e);
+                    }
                 }
             }).data("kendoDropDownList");
 
@@ -68,10 +72,11 @@ var ExtDropDown = Widget.extend({
                          e.stopPropagation();
                     });
 
+            //that._updateText();
             that.trigger(INIT);
         },
         formatDisplayText : function() {
-            return this.value();
+            return this.value() || "";
         },
         dropDownList: function () {
             /// <summary>
@@ -80,11 +85,31 @@ var ExtDropDown = Widget.extend({
 
             return this._dropdown;
         },
+        _updateText:function() {
+            var that = this;
+            that._dropdown.text(that.options.displayFormatter ? that.options.displayFormatter() : that.formatDisplayText());
+        },
+        isOpen:function() {
+            return this._contentWrapper.hasClass(this._visibleClass);
+        },
+        _opened:function(e) {
+            var that = this,
+                wrapper = that._contentWrapper;
+
+            that._dropdown.close();
+
+            wrapper.addClass(that._visibleClass);
+            $(document).on('mousedown', $.proxy(that.close, that));
+            
+            that.trigger(OPEN);
+        },
         open : function(e) {
             var that = this;
 
-            //to prevent the dropdown from opening or closing.
-            e.preventDefault();
+            if(e) {
+                //to prevent the dropdown from opening or closing.
+                e.preventDefault();
+            }
 
             var wrapper = that._contentWrapper;
             if (!wrapper.hasClass(that._visibleClass)) {
@@ -98,14 +123,18 @@ var ExtDropDown = Widget.extend({
                     "left": $dropdownRootElem.position().left
                 });
                
-                wrapper.slideToggle('fast', function () {
-                    that._dropdown.close();
-                    wrapper.addClass(that._visibleClass);
-               
-                    $(document).on('mousedown', $.proxy(that.close, that));
-                    that.trigger(OPEN);
-                });
+                wrapper.slideToggle('fast', $.proxy(that._opened, that));
             }
+        },
+        _closed:function(e) {
+             var that = this,
+                  wrapper = that._contentWrapper;
+            wrapper.removeClass(that._visibleClass);
+             
+             $(document).off('mousedown', this.close);
+             that._updateText();
+            
+             that.trigger(CLOSE);
         },
         close: function(e) {
             var that = this;
@@ -114,25 +143,20 @@ var ExtDropDown = Widget.extend({
 
             if (wrapper.hasClass(that._visibleClass)) {
                 
-                wrapper.slideToggle('fast', function () {
-                        wrapper.removeClass(that._visibleClass);
-                        
-                        $(document).off('mousedown', this.close);
-                        that._dropdown.text(that.options.displayFormatter ? that.options.displayFormatter() : that.formatDisplayText());
-                        that.trigger(CLOSE);
-                    });
+                wrapper.slideToggle('fast', $.proxy(that._closed, that));
             }
         },
         value: function(val) {
+
             var that = this;
 
-            var result =  that.options.valueProvider ? that.options.valueProvider(val) : undefined;
-            return result;
-
+            //if(arguments.length === 0) {
+                return that.options.valueProvider ? that.options.valueProvider(val) : undefined;
+            //}
         },
         content: function (newContent) {
             var that = this;
-            if(newContent) {
+            if(arguments.length > 0) {
                 that._contentWrapper.empty(); //probably need to do some tear down
                 that._content = newContent;
                 that._contentWrapper.append(that._content);
