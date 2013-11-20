@@ -72,7 +72,7 @@ var ExtDropDown = Widget.extend({
                          e.stopPropagation();
                     });
 
-            //that._updateText();
+            that._updateText();
             that.trigger(INIT);
         },
         formatDisplayText : function() {
@@ -313,6 +313,7 @@ var ExtDropDown = Widget.extend({
                     that._to.value(val.to);
                     that.trigger(CHANGE);
                 }
+                that._value = that._getValue();
                 // else if() { 
                 //    // if(val) {
                 //     that._from.value(val.from);

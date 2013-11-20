@@ -114,6 +114,7 @@
                     that._to.value(val.to);
                     that.trigger(CHANGE);
                 }
+                that._value = that._getValue();
                 // else if() { 
                 //    // if(val) {
                 //     that._from.value(val.from);

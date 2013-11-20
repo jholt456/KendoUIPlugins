@@ -72,7 +72,7 @@ var ExtDropDown = Widget.extend({
                          e.stopPropagation();
                     });
 
-            //that._updateText();
+            that._updateText();
             that.trigger(INIT);
         },
         formatDisplayText : function() {

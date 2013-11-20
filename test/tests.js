@@ -1,4 +1,4 @@
-//Extendable drop down
+module( "Extendable Drop Down" );
 	//creation
 	test( "Ext Drop Down Can Be Created", function() {
 	  var el = $("<div id='extDD'/>").kendoExtDropDown();
@@ -9,44 +9,41 @@
 	});
 
 	//Events
-		// asyncTest( "Ext Drop Down Should Trigger Open Event On Open", 1, function() {
-		// 	var el = $("<div id='extDDOpener'/>").kendoExtDropDown();
+	asyncTest( "Ext Drop Down Should Trigger Open Event On Open", 1, function() {
+		var el = $("<div id='extDDOpener'/>").kendoExtDropDown();
 
-		// 	var fired = false;
-		// 	var kendoObj = el.data('kendoExtDropDown');
+		
+		var kendoObj = el.data('kendoExtDropDown');
 
-		// 	kendoObj.bind("open", function() {
-		// 		fired = true;
-		// 		ok(fired, "Open Event Fired");
-		// 		start();
-		// 	});
-
-
-		// 	kendoObj.open();
-
+		kendoObj.bind("open", function() {
 			
-		// });
+			ok(true, "Open Event Fired");
+			start();
+		});
 
-		// asyncTest( "Ext Drop Down Should Trigger Close Event On Close", 1, function() {
-		// 	var el = $("<div id='extDDCloser'/>").kendoExtDropDown();
+		kendoObj.open();
+	});
 
-		// 	var fired = false;
-		// 	var kendoObj = el.data('kendoExtDropDown');
+	asyncTest( "Ext Drop Down Should Trigger Close Event On Close", 1, function() {
+		var el = $("<div id='extDDCloser'/>").kendoExtDropDown();
 
-		// 	kendoObj.bind("close", function() {
-		// 		fired = true;
-		// 		ok(fired, "Close Event Fired");
-		// 		start();
-		// 	});
+		
+		var kendoObj = el.data('kendoExtDropDown');
 
-		// 	kendoObj.open();
-		// 	kendoObj.close();
-
+		kendoObj.bind("close", function() {
 			
-		// });
+			ok(true, "Close Event Fired");
+			start();
+		});
 
-//basic range pickers
-	////DATE RANGE
+		kendoObj.open();
+		kendoObj.close();
+
+		
+	});
+
+module( "Basic Range Pickers" );
+	
 	test( "Date Range Picker Can Be Created", function() {
 	  var el = $("<div id='extDD'/>").kendoDateRangePicker();
 
@@ -97,9 +94,89 @@
 	  ok(!wasChanged, "Date Picker Should not fire change event here");
 	});
 
+	test( "Numeric Range Picker Can Be Created", function() {
+	  var el = $("<div id='extDD'/>").kendoNumericRangePicker();
 
-//Drop down date range picker
-	test( "Drop Down Date Range Picker Can Be Created", function() {
+	  var kendoObj = el.data('kendoNumericRangePicker');
+	  ok( kendoObj !== undefined, "Kendo data Object Returned");
+	  ok( el.attr("id") === "extDD", "Element returned" );
+	});  
+
+	test( "Numeric Range Should Fire Change When Set To New Value", function() {
+	  var el = $("<div id='extDD'/>").kendoNumericRangePicker();
+
+	  var wasChanged = false;
+	  var kendoObj = el.data('kendoNumericRangePicker');
+	  kendoObj.bind("change", function() {
+	  	wasChanged = true;
+	  });
+	  kendoObj.value({from:1, to:2});
+
+	  ok(wasChanged, "Numeric Picker Fired Change Event When Changed");
+	});
+
+	test( "Numeric Range Should NOT Fire Change When Set to SAME value", function() {
+	  var el = $("<div id='extDD'/>").kendoNumericRangePicker();
+
+	  var wasChanged = false;
+	  var kendoObj = el.data('kendoNumericRangePicker');
+
+	  var val = {from:1, to:2};
+	  kendoObj.value(val);
+	  
+	  kendoObj.bind("change", function() {
+	  	wasChanged = true;
+	  });
+
+	  kendoObj.value(val);
+
+		ok(!wasChanged, "Numeric picker should not fire change here");
+	});
+
+	//Calendar Picker
+	test( "Calendar Range Picker Can Be Created", function() {
+	  var el = $("<div id='extDD'/>").kendoCalendarRangePicker();
+
+	  var kendoObj = el.data('kendoCalendarRangePicker');
+	  ok( kendoObj !== undefined, "Kendo data Object Returned");
+	  ok( el.attr("id") === "extDD", "Element returned" );
+	});
+
+
+	test( "Calendar Range Should Fire Change When Set To New Value", function() {
+	  var el = $("<div id='extDD'/>").kendoCalendarRangePicker();
+
+	  var wasChanged = false;
+	  var kendoObj = el.data('kendoCalendarRangePicker');
+	  kendoObj.bind("change", function() {
+	  	wasChanged = true;
+	  });
+	  kendoObj.value({from:new Date(), to:new Date()});
+
+	  ok(wasChanged, "Calendar Picker Fired Change Event When Changed");
+	});
+
+	test( "Calendar Range Should NOT Fire Change When Set to SAME value", function() {
+	  var el = $("<div id='extDD'/>").kendoCalendarRangePicker();
+
+	  var wasChanged = false;
+	  var kendoObj = el.data('kendoCalendarRangePicker');
+
+	  var val = {from:new Date(), to:new Date()};
+	  kendoObj.value(val);
+	  
+	  kendoObj.bind("change", function() {
+	  	wasChanged = true;
+	  });
+
+	  kendoObj.value(val);
+
+		ok(!wasChanged, "Calendar picker should not fire change here");
+	});
+
+
+module( "Drop Down Ranged" );
+	test( "Date Picker Can Be Created", function() {
 	  var el = $("<div id='extDD'/>").kendoExtDropDownDateRangePicker();
 
 	  var kendoObj = el.data('kendoExtDropDownDateRangePicker');
@@ -107,7 +184,7 @@
 	  ok( el.attr("id") === "extDD", "Element returned" );
 	});
 
-	test( "Drop Down Date Range Should NOT Fire Change When Date Not Changed During Open And Close", function() {
+	test( "Date Picker Should NOT Fire Change When Date Not Changed During Open And Close", function() {
 	  var el = $("<div id='extDD'/>").kendoExtDropDownDateRangePicker();
 
 	  var wasChanged = false;
@@ -126,7 +203,7 @@
 	  ok(!wasChanged, "Drop Down Date Picker Should not fire change event here");
 	});
 
-	test( "Drop Down Date Range Should NOT Fire Change While Open", function() {
+	test( "Date Picker Should NOT Fire Change While Open", function() {
 	  var el = $("<div id='extDD'/>").kendoExtDropDownDateRangePicker();
 
 	  var wasChanged = false;
@@ -147,8 +224,8 @@
 	  ok(!wasChanged, "Drop Down Date Picker Should  NOT fire change event until closed");
 	});
 
-	test( "Drop Down Date Range Should Fire Change On Close, When Date Changed While Open", function() {
-	  var el = $("<div id='extDD'/>").kendoExtDropDownDateRangePicker();
+	asyncTest( "Date Picker Should Fire Change On Close, When Date Changed While Open", 1, function() {
+	  var el = $("<div id='extDDDatePickerChangeTest'/>").kendoExtDropDownDateRangePicker();
 
 	  var wasChanged = false;
 	  var kendoObj = el.data('kendoExtDropDownDateRangePicker');
@@ -160,17 +237,15 @@
 	  kendoObj._rangePicker.value(val);
 
 	  kendoObj.bind("change", function() {
-	  	wasChanged = true;
+	  	 wasChanged = true;
+	  	 ok(wasChanged, "Drop Down Date Picker Should  fire change event here");
+	  	 start();
 	  });
 	  
 	  kendoObj.close();
-
-	  ok(wasChanged, "Drop Down Date Picker Should  fire change event here");
 	});
 
-	
-
-	test( "Drop Down Date Range Should Allow Value to Be Set", function() {
+	test( "Date Picker Should Allow Value to Be Set", function() {
 	  var el = $("<div id='extDD'/>").kendoExtDropDownDateRangePicker();
 
 	  var kendoObj = el.data('kendoExtDropDownDateRangePicker');
@@ -180,7 +255,7 @@
 	  ok(val.to && val.from && val.from == date && val.to == date, "Date Range Picker could set and retrieve date");
 	});
 
-	test( "Drop Down Date Range Should Fire Change When Date Set", function() {
+	test( "Date Picker Should Fire Change When Date Set", function() {
 	  var el = $("<div id='extDD'/>").kendoExtDropDownDateRangePicker();
 
 	  var wasChanged = false;
@@ -194,7 +269,7 @@
 	});
 
 
-	test( "Drop Down Date Range Should NOT Fire Change When Date Set to SAME value", function() {
+	test( "Date Picker Should NOT Fire Change When Date Set to SAME value", function() {
 	  var el = $("<div id='extDD'/>").kendoExtDropDownDateRangePicker();
 
 	  var wasChanged = false;
@@ -213,119 +288,29 @@
 	  ok(!wasChanged, "Date Picker Should not fire change event here");
 	});
 
-	//Numeric Picker
-		test( "Numeric Range Picker Can Be Created", function() {
-		  var el = $("<div id='extDD'/>").kendoNumericRangePicker();
+	//Calendar
+	test( "Calendar Picker Can Be Created", function() {
+	  var el = $("<div id='extDD'/>").kendoExtDropDownCalendarRangePicker();
 
-		  var kendoObj = el.data('kendoNumericRangePicker');
-		  ok( kendoObj !== undefined, "Kendo data Object Returned");
-		  ok( el.attr("id") === "extDD", "Element returned" );
-		});  
+	  var kendoObj = el.data('kendoExtDropDownCalendarRangePicker');
+	  ok( kendoObj !== undefined, "Kendo data Object Returned");
+	  ok( el.attr("id") === "extDD", "Element returned" );
+	});
 
-		test( "Numeric Range Should Fire Change When Set To New Value", function() {
-		  var el = $("<div id='extDD'/>").kendoNumericRangePicker();
+	//Numeric
+	test( "Numeric Picker Can Be Created", function() {
+	  var el = $("<div id='extDD'/>").kendoExtDropDownNumericRangePicker();
 
-		  var wasChanged = false;
-		  var kendoObj = el.data('kendoNumericRangePicker');
-		  kendoObj.bind("change", function() {
-		  	wasChanged = true;
-		  });
-		  kendoObj.value({from:1, to:2});
+	  var kendoObj = el.data('kendoExtDropDownNumericRangePicker');
+	  ok( kendoObj !== undefined, "Kendo data Object Returned");
+	  ok( el.attr("id") === "extDD", "Element returned" );
+	});
 
-		  ok(wasChanged, "Numeric Picker Fired Change Event When Changed");
-		});
+module( "Google Style Date Range Picker" );
+	test( "Can Be Created", function() {
+	  var el = $("<div id='extDD'/>").kendoExtDateRangePicker();
 
-		test( "Numeric Range Should NOT Fire Change When Set to SAME value", function() {
-		  var el = $("<div id='extDD'/>").kendoNumericRangePicker();
-
-		  var wasChanged = false;
-		  var kendoObj = el.data('kendoNumericRangePicker');
-
-		  var val = {from:1, to:2};
-		  kendoObj.value(val);
-		  
-		  kendoObj.bind("change", function() {
-		  	wasChanged = true;
-		  });
-
-		  kendoObj.value(val);
-
-			ok(!wasChanged, "Numeric picker should not fire change here");
-		});
-
-		//Calendar Picker
-		test( "Calendar Range Picker Can Be Created", function() {
-		  var el = $("<div id='extDD'/>").kendoCalendarRangePicker();
-
-		  var kendoObj = el.data('kendoCalendarRangePicker');
-		  ok( kendoObj !== undefined, "Kendo data Object Returned");
-		  ok( el.attr("id") === "extDD", "Element returned" );
-		});
-
-
-		test( "Calendar Range Should Fire Change When Set To New Value", function() {
-		  var el = $("<div id='extDD'/>").kendoCalendarRangePicker();
-
-		  var wasChanged = false;
-		  var kendoObj = el.data('kendoCalendarRangePicker');
-		  kendoObj.bind("change", function() {
-		  	wasChanged = true;
-		  });
-		  kendoObj.value({from:new Date(), to:new Date()});
-
-		  ok(wasChanged, "Calendar Picker Fired Change Event When Changed");
-		});
-
-		test( "Calendar Range Should NOT Fire Change When Set to SAME value", function() {
-		  var el = $("<div id='extDD'/>").kendoCalendarRangePicker();
-
-		  var wasChanged = false;
-		  var kendoObj = el.data('kendoCalendarRangePicker');
-
-		  var val = {from:new Date(), to:new Date()};
-		  kendoObj.value(val);
-		  
-		  kendoObj.bind("change", function() {
-		  	wasChanged = true;
-		  });
-
-		  kendoObj.value(val);
-
-			ok(!wasChanged, "Calendar picker should not fire change here");
-		});
-
-
-//Basic Drop down range pickers
-test( "Ext DropDown Calendar Range Picker Can Be Created", function() {
-  var el = $("<div id='extDD'/>").kendoExtDropDownCalendarRangePicker();
-
-  var kendoObj = el.data('kendoExtDropDownCalendarRangePicker');
-  ok( kendoObj !== undefined, "Kendo data Object Returned");
-  ok( el.attr("id") === "extDD", "Element returned" );
-});
-
-test( "Ext DropDown Date Range Picker Can Be Created", function() {
-  var el = $("<div id='extDD'/>").kendoExtDropDownDateRangePicker();
-
-  var kendoObj = el.data('kendoExtDropDownDateRangePicker');
-  ok( kendoObj !== undefined, "Kendo data Object Returned");
-  ok( el.attr("id") === "extDD", "Element returned" );
-});
-
-test( "Ext DropDown Numeric Range Picker Can Be Created", function() {
-  var el = $("<div id='extDD'/>").kendoExtDropDownNumericRangePicker();
-
-  var kendoObj = el.data('kendoExtDropDownNumericRangePicker');
-  ok( kendoObj !== undefined, "Kendo data Object Returned");
-  ok( el.attr("id") === "extDD", "Element returned" );
-});
-
-
-//Google style range picker
-test( "Ext Date Range Picker Can Be Created", function() {
-  var el = $("<div id='extDD'/>").kendoExtDateRangePicker();
-
-  var kendoObj = el.data('kendoExtDateRangePicker');
-  ok( kendoObj !== undefined, "Kendo data Object Returned");
-  ok( el.attr("id") === "extDD", "Element returned" );
-});
+	  var kendoObj = el.data('kendoExtDateRangePicker');
+	  ok( kendoObj !== undefined, "Kendo data Object Returned");
+	  ok( el.attr("id") === "extDD", "Element returned" );
+	});
