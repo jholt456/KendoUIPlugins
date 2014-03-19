@@ -1,9 +1,4 @@
-.k-state-in-range {
-		color: #fff;
-		background-color: #F1B69C;
-		border-color: #F1B69C;
-		background-image: none,linear-gradient(to bottom,#FFCEAD 0,#E6A586 100%);
-	}
+
 	
 	.btn-success {
 		color: #fff;
@@ -25,3 +20,44 @@
 	.section {
 		margin-left:30px;
 	}
+
+	.k-date-range-picker  {
+		
+	}
+	.k-state-in-range {
+		color: #fff;
+		background-color: #F1B69C;
+		border-color: #F1B69C;
+		background-image: none,linear-gradient(to bottom,#FFCEAD 0,#E6A586 100%);
+	}
+		.k-date-range-picker .k-picker-panel {
+		}
+			
+			.k-date-range-picker .k-picker-panel .calendars {
+				width:34em;
+		 		float: right;
+		        margin: 5px;
+			}
+
+			.k-date-range-picker .k-picker-panel .options {
+				float: left;
+                width: 200px;
+                margin: 5px;
+                height: 227px;
+                position: relative;
+            }
+            	.k-date-range-picker .k-picker-panel .k-primary {
+            		position: absolute;
+                    bottom: 5px;
+	            }
+	            .k-date-range-picker .k-picker-panel .k-secondary {
+	            	position: absolute;
+                    bottom: 5px;
+                    right: 5px;
+	            }
+
+	            .k-date-range-picker .k-picker-panel .options .k-range-options {
+	            }
+	            	.k-date-range-picker .k-picker-panel .options .k-range-options .k-range-option {
+	            		width:48%;
+	            	}

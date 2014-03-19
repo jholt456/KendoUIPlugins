@@ -2,7 +2,7 @@ require("kendoExtRangePicker");
 /// <author>Joshua Holt</author>
 
 (function($) {
-    
+
     var kendo = window.kendo,
         ui = kendo.ui,
         Widget = ui.RangePicker;
@@ -17,12 +17,12 @@ require("kendoExtRangePicker");
             Widget.fn.init.call(that, element, options);
 
             //bind to the change handlers to force a redraw
-            that._from.bind("change", 
+            that._from.bind("change",
                 function(e) {
                     that._update();
                 });
 
-            that._to.bind("change", 
+            that._to.bind("change",
                 function(e) {
                     that._update();
                 });
@@ -30,26 +30,44 @@ require("kendoExtRangePicker");
             //handle custom style for days between selected dates
             var defaultFromContent = that._from.month.content;
             var defaultToContent = that._to.month.content;
+
+            /* that._from.year.content = function(data) {
+                if (that._to.value() && that._from.value() && data && data.date > that._from.value() && data.date <= that._to.value()) {
+                    return that._customStyle(data);
+                }
+                return defaultFromContent(data);
+            };
+
+            that._to.year.content = function(data) {
+                if (that._to.value() && that._from.value() && data && data.date >= that._from.value() && data.date < that._to.value()) {
+
+                    return that._customStyle(data);
+                }
+                return defaultFromContent(data);
+            };*/
+
             that._from.month.content = function(data) {
-                if(that._to.value() && that._from.value() && data && data.date > that._from.value() && data.date <= that._to.value()) {
+                if (that._to.value() && that._from.value() && data && data.date > that._from.value() && data.date <= that._to.value()) {
                     return that._customStyle(data);
                 }
                 return defaultFromContent(data);
             };
 
             that._to.month.content = function(data) {
-                if(that._to.value() && that._from.value() && data && data.date >= that._from.value() && data.date < that._to.value()) {
-                
+                if (that._to.value() && that._from.value() && data && data.date >= that._from.value() && data.date < that._to.value()) {
+
                     return that._customStyle(data);
                 }
                 return defaultFromContent(data);
             };
+
+            that._update();
         },
-        _setValue : function(val) {
+        _setValue: function(val) {
             Widget.fn._setValue.call(this, val);
             this._update();
         },
-        _update : function() {
+        _update: function() {
             var that = this;
 
             //temporarily disable nav settings while redrawing the selection 
@@ -66,20 +84,20 @@ require("kendoExtRangePicker");
             that._from.options.animation = tempFromAnimation;
             that._to.options.animation = tempToAnimation;
         },
-        _customStyle : function(data) {
+        _customStyle: function(data) {
             var that = this;
             var template,
                 css = ' class="' + that.options.inRangeClass + ' "';
-            if(data.cssClass) {
+            if (data.cssClass) {
                 //inject our class if there are already styles
                 css = data.cssClass.replace('class=\"', css);
             }
-            template ='<td'+(css)+' role="gridcell"><a tabindex="-1" class="k-link'+(data.linkClass)+'" href="'+(data.url)+'" data-value="'+(data.dateString)+'" title="'+(data.title)+'">'+(data.value)+'</a></td>';
+            template = '<td' + (css) + ' role="gridcell"><a tabindex="-1" class="k-link' + (data.linkClass) + '" href="' + (data.url) + '" data-value="' + (data.dateString) + '" title="' + (data.title) + '">' + (data.value) + '</a></td>';
             return template;
         },
-        settings : {
-            template : "<div />",
-            type:"kendoCalendar"
+        settings: {
+            template: "<div />",
+            type: "kendoCalendar"
         },
         options: {
             name: "CalendarRangePicker",
@@ -96,9 +114,9 @@ require("kendoExtRangePicker");
             // base call to initialize widget
             Widget.fn.init.call(this, element, options);
         },
-        settings : {
-            template : "<input/>",
-            type:"kendoNumericTextBox"
+        settings: {
+            template: "<input/>",
+            type: "kendoNumericTextBox"
         },
         options: {
             name: "NumericRangePicker"
@@ -113,9 +131,9 @@ require("kendoExtRangePicker");
             // base call to initialize widget
             Widget.fn.init.call(this, element, options);
         },
-        settings : {
-            template : "<input/>",
-            type:"kendoDatePicker"
+        settings: {
+            template: "<input/>",
+            type: "kendoDatePicker"
         },
         options: {
             name: "DateRangePicker"

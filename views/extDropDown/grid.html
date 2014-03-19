@@ -1,0 +1,76 @@
+<div>
+	<p>This examples use a drop down which allows users to inject any content into them during set up. They were the first step to building the plugins shown in the next section; so I included them here. They require a bit of extra configuration and are a little rough, though they allow some intersting things, such as putting any kendo widget within a drop down.</p>
+
+	<h3>Grid Drop Down</h3>
+	<div id="dropDownGrid"></div>
+	<div id="dropDownGridContent"></div>
+	<script>
+		$(function() {
+
+				var gridSelectorDD = $("#dropDownGridContent").kendoGrid({
+                        dataSource: {
+                            type: "odata",
+                            transport: {
+                                read: "http://demos.kendoui.com/service/Northwind.svc/Orders"
+                            },
+                            schema: {
+                                model: {
+                                    fields: {
+                                        OrderID: { type: "number" },
+                                        Freight: { type: "number" },
+                                        ShipName: { type: "string" },
+                                        OrderDate: { type: "date" },
+                                        ShipCity: { type: "string" }
+                                    }
+                                }
+                            },
+                            pageSize: 20,
+                            serverPaging: true,
+                            serverFiltering: true,
+                            serverSorting: true
+                        },
+                        height: 430,
+                        filterable: true,
+                        sortable: true,
+                        pageable: true,
+            			selectable: true,
+                        columns: [{
+                                field:"OrderID",
+                                filterable: false
+                            },
+                            "Freight",
+                            {
+                                field: "OrderDate",
+                                title: "Order Date",
+                                width: 120,
+                                format: "{0:MM/dd/yyyy}"
+                            }, {
+                                field: "ShipName",
+                                title: "Ship Name",
+                                width: 260
+                            }, {
+                                field: "ShipCity",
+                                title: "Ship City",
+                                width: 150
+                            }
+                        ]
+                    }).data("kendoGrid");
+
+			
+			var gridDD = $("#dropDownGrid").kendoExtDropDown({ content: gridSelectorDD.element,
+															   change:changed,
+																valueProvider: function(e) {
+																	var result = "";
+																	var selected = gridSelectorDD.select();
+																	var data = gridSelectorDD.dataItem(selected);
+																	if(data) {
+											                    		return data.CustomerID;
+											                    	}
+											                    	return undefined;
+																} 
+															})
+											   	  		.data("kendoExtDropDown");
+		});
+	</script>
+
+</div>

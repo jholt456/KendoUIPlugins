@@ -1,0 +1,48 @@
+<div>
+	<h3>Date Range Picker</h3>
+	<p>Standard config options for from/to box</p>
+	<div id="dateRangePicker"></div>
+
+	<h3>Date Range Picker With Custom Seperator</h3>
+	<p>Seperator is easily changed</p>
+	<div id="dateRangePickerWithSep"></div>
+
+	<h3>Date Range Picker With Custom Seperator</h3>
+	<p>Force users to select values</p>
+	<div id="dateRangePickerWithForce"></div>
+
+
+	<script>
+		$(function() {
+			var today = new Date();
+			var future = new Date();
+			var x = 31; 
+			future.setDate(today.getDate() + x);
+			$("#dateRangePicker").kendoDateRangePicker({
+															 change:changed, 
+															 fromPickerOptions : {
+															 	value:today
+															 },
+															 toPickerOptions : {
+															 	value: future
+															 }
+														});
+
+			$("#dateRangePickerWithSep").kendoDateRangePicker({
+																   change:changed, 
+																   seperator:" < > "
+															  });
+
+			$("#dateRangePickerWithForce").kendoDateRangePicker({ 
+																   change:changed, 
+																   allowOpenEnd: false, 
+																   defaultPickerOptions: {
+																		value:today
+																	}
+																});
+
+			
+		});
+	</script>
+</div>
+

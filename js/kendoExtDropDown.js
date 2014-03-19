@@ -24,7 +24,7 @@ var ExtDropDown = Widget.extend({
             // Generate a unique id.
             that._uid = new Date().getTime();
 
-            that._contentWrapper = $(kendo.format("<div id='extDropDownContentWrapper{0}' class='k-widget k-popup k-list-container' style='z-index:1;'/>", 
+            that._contentWrapper = $(kendo.format("<div id='extDropDownContentWrapper{0}' class='k-widget k-popup k-list-container' style='z-index:1000000;'/>", 
                                          that._uid));
 
             var wrapper = that._contentWrapper;

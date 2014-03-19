@@ -64,10 +64,12 @@ require("kendoExtDropDown");
                 var val = that.value();
                 if(that.options.valueFormatter) {
 
-                  return  that.options.valueFormatter(val);
+                  return  that.options.valueFormatter(val) || "";
                 }
 
-                return val.text? val.text : val;      
+                return !val ? "" :
+                            val.text ? val.text : 
+                                            val;     
             },
             options: {
                 name: "ExtDropDownKendoWidget"
@@ -78,16 +80,18 @@ require("kendoExtDropDown");
             value : function(val) {
                 var that = this;
 
-                if(arguments.length === 0) {
-                    return that._widget.value ? that._widget.value() : 
-                                                that._widget.dataItem && that._widget.select ? that._widget.dataItem(that._widget.select()) :
-                                                                                               that._widget.select ? that._widget.select() : "";
-                     
-                }
+                if(that._widget) {
+                    if(arguments.length === 0) {
+                        return that._widget.value ? that._widget.value() : 
+                                                    that._widget.dataItem && that._widget.select ? that._widget.dataItem(that._widget.select()) :
+                                                                                                   that._widget.select ? that._widget.select() : "";
+                         
+                    }
 
-                return that._widget.value ? that._widget.value(val) : 
-                                        that._widget.select ? that._widget.select(val) : 
-                                                              $.noop();
+                    return that._widget.value ? that._widget.value(val) : 
+                                            that._widget.select ? that._widget.select(val) : 
+                                                                  $.noop();
+                                                          }
             }
         });
 

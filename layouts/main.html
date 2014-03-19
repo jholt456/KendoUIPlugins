@@ -1,0 +1,39 @@
+<div id="layout">
+      <ul id="menu" data-role="menu"
+                    		  data-bind="events: { select: onSelect },
+                               visible: isVisible">
+        <li data-route="/">
+            Home
+        </li>
+        <li>
+            Range Pickers
+            <ul> 
+                <li data-route="/ExtRangePicker/Date">Date</li>
+                <li data-route="/ExtRangePicker/Calendar">Calendar</li>
+                <li data-route="/ExtRangePicker/Numeric">Numeric</li>
+            </ul>
+        </li>
+        <li>
+            Extended Drop Down
+            <ul> 
+                <li data-route="/ExtDropDown/Numeric">Numeric</li>
+                <li data-route="/ExtDropDown/Date">Date</li>
+                <li data-route="/ExtDropDown/Calendar">Calendar</li>
+                <li data-route="/ExtDropDown/Grid">Grid</li>
+                <li data-route="/ExtDropDown/Widget">Kendo Widget</li>
+            </ul>
+        </li>
+        <li>
+            Drop Down Range Pickers
+            <ul> 
+                <li data-route="/ExtDropDownRangePickers/Numeric">Numeric</li>
+                <li data-route="/ExtDropDownRangePickers/Date">Date</li>
+                <li data-route="/ExtDropDownRangePickers/Calendar">Calendar</li>
+                <li data-route="/ExtDropDownRangePickers/AdvancedDatePicker">Badass DatePicker</li>
+            </ul>
+        </li>
+    </ul>
+
+    <div id="body">
+    </div>
+</div>
