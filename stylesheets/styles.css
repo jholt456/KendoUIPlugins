@@ -28,6 +28,9 @@ h2 {
   color:#393939;
 }
 
+h3 {
+  margin-top: 30px;
+}
 h3, h4, h5, h6 {
   color:#494949;
 }
@@ -96,9 +99,9 @@ img {
 }
 
 header {
-  width:270px;
-  float:left;
-  position:fixed;
+    float:none;
+    position:static;
+    width:auto;
 }
 
 header ul {
@@ -183,7 +186,7 @@ footer {
   bottom:50px;
 }
 
-@media print, screen and (max-width: 960px) {
+
   
   div.wrapper {
     width:auto;
@@ -216,7 +219,7 @@ footer {
     right:50px;
     top:52px;
   }
-}
+
 
 @media print, screen and (max-width: 720px) {
   body {
