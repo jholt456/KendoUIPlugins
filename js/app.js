@@ -118,22 +118,22 @@
      }
 
      return def.promise();
+ };
+
+
+ function changed(e) {
+     console.log("changed (event binding)");
+     console.log(e.sender.value());
  }
 
+ function changed2(e) {
+     console.log("changed (options bound)");
+     console.log(e.sender.value());
+ }
 
-     function changed(e) {
-         console.log("changed (event binding)");
-         console.log(e.sender.value());
+ function formatValue(val, format) {
+     if (val && (val.from || val.to)) {
+         return kendo.format("{0} - {1}", kendo.toString(val.from, format) || "and Before", kendo.toString(val.to, format) || "and After");
      }
-
-     function changed2(e) {
-         console.log("changed (options bound)");
-         console.log(e.sender.value());
-     }
-
-     function formatValue(val, format) {
-         if (val && (val.from || val.to)) {
-             return kendo.format("{0} - {1}", kendo.toString(val.from, format) || "and Before", kendo.toString(val.to, format) || "and After");
-         }
-         return "";
-     }
+     return "";
+ }
