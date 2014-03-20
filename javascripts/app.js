@@ -28,7 +28,7 @@
          var contentArea = $("#body");
 
 
-         var changePage = function(route, name, path, path, isRemoteLoad) {
+         var changePage = function(route, name, path, isRemoteLoad) {
              layout.showIn(contentArea, views[name]); // switch view
 
              $(document).trigger("viewSwtichedEvent", {
@@ -40,7 +40,7 @@
              kendo.fx(contentArea).slideInRight().play().then(function() {
                  //fix issue with alignment
                  document.getElementById('body').style.WebkitTransform = "none";
-             });; // transition, slide view back to the right (center)
+             }); // transition, slide view back to the right (center)
          };
 
          var addRoute = function(route, name, path, forceRemoteLoad, model) {
@@ -103,7 +103,7 @@
      var def = $.Deferred();
 
 
-     if (views[name] == null || force) {
+     if (views[name] === null || force) {
          templateLoader.loadExtTemplate(name, path)
              .success(function(result) {
                  views[name] = new kendo.View($(result), {
