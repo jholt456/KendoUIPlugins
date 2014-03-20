@@ -1,0 +1,151 @@
+<div>
+	<h3>Date Range Picker</h3>
+	<div id="dropDownGoogleStylePicker"></div>
+
+	<h3>Month / Year Range Picker</h3>
+	<p>Limits selection to month/year<p>
+	<div id="dropDownGoogleStylePickerMonthDepth"></div>
+
+
+	<script>
+		$(function() {
+
+			var today = new Date();
+			var future = new Date();
+			var x = 31; 
+			future.setDate(today.getDate() + x);
+
+				$("#dropDownGoogleStylePickerMonthDepth").kendoExtDateRangePicker({change:changed, pickerOptions: {
+	                    fromPickerOptions : {
+	                        value: today,
+	                        // defines the start view
+		                    start: "year",
+
+		                    // defines when the calendar should return date
+		                    depth: "year",
+
+		                    // display month and year in the input
+		                    format: "MMMM yyyy"
+	                    },
+	                    toPickerOptions : {
+	                        value: future,
+	                        // defines the start view
+		                    start: "year",
+
+		                    // defines when the calendar should return date
+		                    depth: "year",
+
+		                    // display month and year in the input
+		                    format: "MMMM yyyy"
+	                    },
+	                    allowOpenEnd:false
+                	}, 
+                	ranges:[
+					{
+						text :"Last 3 Months",
+						value : {
+									from : function() {
+														var date = new Date();
+														date.setDate(date.getDate() - 90)
+														return date;
+													},
+									to : new Date()
+								}
+					},
+					{
+						text :"Last 2 Months",
+						value : {
+									from : function() {
+														var date = new Date();
+														date.setDate(date.getDate() - 60)
+														return date;
+													},
+									to : new Date()
+								}
+					},
+					{
+						text :"Last Month",
+						value : {
+									from : function() {
+														var date = new Date();
+														date.setDate(date.getDate() - 30)
+														return date;
+													},
+									to : new Date()
+								}
+					},
+					{
+						text :"This Year",
+						value : {
+									from : new Date(new Date().getFullYear(), 0, 1),
+									to : new Date()
+								}
+					},
+					{
+						text :"Last Year",
+						value : {
+									from : new Date(new Date().getFullYear() - 1, 0, 1),
+									to : new Date(new Date().getFullYear(), 0, 1)
+								}
+					}
+
+				]});
+
+
+$("#dropDownGoogleStylePicker").kendoExtDateRangePicker({change:changed, pickerOptions: {
+	                    fromPickerOptions : {
+	                        value: today,
+	                    },
+	                    toPickerOptions : {
+	                        value: future
+	                    },
+	                    allowOpenEnd:false
+                	}, 
+                	ranges:[
+					{
+						text :"Past 90 Days",
+						value : {
+									from : function() {
+														var date = new Date();
+														date.setDate(date.getDate() - 90)
+														return date;
+													},
+									to : new Date()
+								}
+					},
+					{
+						text :"Past 60 Days",
+						value : {
+									from : function() {
+														var date = new Date();
+														date.setDate(date.getDate() - 60)
+														return date;
+													},
+									to : new Date()
+								}
+					},
+					{
+						text :"Past 30 Days",
+						value : {
+									from : function() {
+														var date = new Date();
+														date.setDate(date.getDate() - 30)
+														return date;
+													},
+									to : new Date()
+								}
+					},
+					{
+						text :"This Year",
+						value : {
+									from : new Date(new Date().getFullYear(), 0, 1),
+									to : new Date()
+								}
+					}
+
+				]});
+			
+		});
+	</script>
+
+</div>

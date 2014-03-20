@@ -33,79 +33,8 @@
       </header>
       <section>
       <div style="padding-bottom:30px">
-		<h2>Basic Range Pickers</h2>
-		<div class="section">
-			<p></p>
-			<h3>Date Range Picker</h3>
-			<p>Standard config options for from/to box</p>
-			<div id="dateRangePicker"></div>
-
-			<h3>Date Range Picker With Custom Seperator</h3>
-			<p>Seperator is easily changed</p>
-			<div id="dateRangePickerWithSep"></div>
-
-			<h3>Date Range Picker With Custom Seperator</h3>
-			<p>Force users to select values</p>
-			<div id="dateRangePickerWithForce"></div>
-
-			<h3>Calendar Date Range Picker</h3>
-			<p>Calendar highlights values between selected dates on the left and right</p>
-			<div id="calendarRangePicker" ></div>
-
-			<h3>Numeric Range Picker</h3>
-			<p>Numeric version also, when users select a greater value for the "to" value, the pickers will auto correct (does this for date pciker also)</p>
-			<div id="numericRangePicker"></div>
-		</div>
-
-		<h2>Extendable Drop Down</h2>
-		<div class="section">
-			<p>These examples use a drop down which allows users to inject any content into them during set up. They were the first step to building the plugins shown further down; so I included them here. They require a bit of extra configuration and are still a little rough, though they allow some intersting things (like the grid drop down).</p>
-
-			<h3>Numeric Range Picker Dropdown</h3>
-			<div id="dropDownNumeric"></div>
-			<div id="dropDownNumericContent"></div>
-
-			<h3>Date Range Picker Dropdown</h3>
-			<div id="dropDownDateRange"></div>
-			<div id="dropDownDateContent"></div>
-
-			<h3>Date Range Picker Dropdown</h3>
-			<div id="dropDownCalendarRange"></div>
-			<div id="dropDownCalendarContent"></div>
-
-			<h3>Grid Drop Down</h3>
-			<div id="dropDownGrid"></div>
-			<div id="dropDownGridContent"></div>
-		</div>
-		<h2>Kendo Widget Drop Downs</h2>
-		<div class="section">
-			<p>These examples extend the above drop down specfifically for use with kendo widgets.</p>
-			<h3>Kendo Widget Drop Down Tree View</h3>
-			<div id="kendoDropDownWidget"></div>
-			<h3>Kendo Widget Drop Down Grid</h3>
-			<div id="kendoDropDownGrid"></div>
-			<h3>Kendo Widget Drop Down Editor</h3>
-			<div id="kendoDropDownEditor"></div>
-		
-		</div>
-		<h2>Ranged Drop Down Plugins</h2>
-		<div class="section">
-			<p>These are the actual drop down range picker plugins. The behave like the ones above, but they are much easier to use</p>
-			
-			<h3>Date Range Drop Down</h3>
-			<div id="dropDownDatePicker"></div>
-
-			<h3>Calendar Range Drop Down</h3>
-			<div id="dropDownCalendarPicker"></div>
-
-			<h3>Numeric Range Drop Down</h3>
-			<div id="dropDownNumericPicker"></div>
-
-			<h3>Customized Picker</h3>
-			<p>This is a custom implmentation created to mimic the picker in google analytics<p>
-			<div id="dropDownGoogleStylePicker"></div>
-		</div>
-	</div>
+		<div id="app"></div>
+	   </div>
 	
       </section>
       <footer>
@@ -117,302 +46,150 @@
      <script type="text/javascript" src="http://cdn.kendostatic.com/2013.2.918/js/kendo.all.min.js"></script>
     <script src="javascripts/scale.fix.js"></script>
     <script src="javascripts/kendo-ext-min.js"></script>
+    
     <script>
-		$(function() {
-			var today = new Date();
-			var future = new Date();
-			var x = 31; 
-			future.setDate(today.getDate() + x);
-			$("#dateRangePicker").kendoDateRangePicker({change:changed, 
-															   fromPickerOptions : {
-																	value:today
-																},
-																toPickerOptions : {
-																	value: future
-																}});
 
-			$("#dateRangePickerWithSep").kendoDateRangePicker({change:changed, 
-															   seperator:" < > "
-																});
+    
+ var views = {};
+   
 
-			$("#dateRangePickerWithForce").kendoDateRangePicker({ change:changed, 
-																   allowOpenEnd: false, 
-																   defaultPickerOptions: {
-																		value:new Date()
-																	}});
-
-			$("#calendarRangePicker").kendoCalendarRangePicker({change:changed}).data("kendoCalendarRangePicker");
-			$("#numericRangePicker").kendoNumericRangePicker({change:changed});
-
-			$("#dropDownDatePicker").kendoExtDropDownDateRangePicker({change:changed});
-			$("#dropDownCalendarPicker").kendoExtDropDownCalendarRangePicker({change:changed});
-			$("#dropDownNumericPicker").kendoExtDropDownNumericRangePicker({change:changed});
-			$("#dropDownGoogleStylePicker").kendoExtDateRangePicker({change:changed, ranges:[
-					{
-						text :"Past 90 Days",
-						value : {
-									from : function() {
-														var date = new Date();
-														date.setDate(date.getDate() - 90)
-														return date;
-													},
-									to : new Date()
-								}
-					},
-					{
-						text :"Past 60 Days",
-						value : {
-									from : function() {
-														var date = new Date();
-														date.setDate(date.getDate() - 60)
-														return date;
-													},
-									to : new Date()
-								}
-					},
-					{
-						text :"Past 30 Days",
-						value : {
-									from : function() {
-														var date = new Date();
-														date.setDate(date.getDate() - 30)
-														return date;
-													},
-									to : new Date()
-								}
-					},
-					{
-						text :"This Year",
-						value : {
-									from : new Date(new Date().getFullYear(), 0, 1),
-									to : new Date()
-								}
-					}
-
-				]});
+    $(function() {
+         
+        templateLoader.loadExtTemplate("layout", "layouts/main.html").success(function(result) {
+             $("body").append(result);
 
 
+        var router = new kendo.Router();
+        var mainModel = kendo.observable({
+                                    isVisible: true,
+                                    onSelect: function(e) {
+                                        var text = $(e.item).data("route");
 
-			var numericSelectorDD = $("#dropDownNumericContent").kendoNumericRangePicker( { change:changed2 } )
-															 	.data("kendoNumericRangePicker");
+                                        if(text) {                                          
+                                          router.navigate(text);
+                                        } 
+                                    } 
+                                });
 
-			var dateSelectorDD = $("#dropDownDateContent").kendoDateRangePicker( { change:changed2 } )
-														  .data("kendoDateRangePicker");
+        var layout = new kendo.Layout('#layout', {  model: mainModel, wrap:false });
 
-			var calendarSelectorDD = $("#dropDownCalendarContent").kendoCalendarRangePicker( { change:changed2 } )
-														  .data("kendoCalendarRangePicker");
+        layout.render("#app");
 
-			var gridSelectorDD = $("#dropDownGridContent").kendoGrid({
-                        dataSource: {
-                            type: "odata",
-                            transport: {
-                                read: "http://demos.kendoui.com/service/Northwind.svc/Orders"
-                            },
-                            schema: {
-                                model: {
-                                    fields: {
-                                        OrderID: { type: "number" },
-                                        Freight: { type: "number" },
-                                        ShipName: { type: "string" },
-                                        OrderDate: { type: "date" },
-                                        ShipCity: { type: "string" }
-                                    }
-                                }
-                            },
-                            pageSize: 20,
-                            serverPaging: true,
-                            serverFiltering: true,
-                            serverSorting: true
-                        },
-                        height: 430,
-                        filterable: true,
-                        sortable: true,
-                        pageable: true,
-            			selectable: true,
-                        columns: [{
-                                field:"OrderID",
-                                filterable: false
-                            },
-                            "Freight",
-                            {
-                                field: "OrderDate",
-                                title: "Order Date",
-                                width: 120,
-                                format: "{0:MM/dd/yyyy}"
-                            }, {
-                                field: "ShipName",
-                                title: "Ship Name",
-                                width: 260
-                            }, {
-                                field: "ShipCity",
-                                title: "Ship City",
-                                width: 150
-                            }
-                        ]
-                    }).data("kendoGrid");
+       
+        var contentArea = $("#body");
 
-			var numericDD = $("#dropDownNumeric").kendoExtDropDown({ content: numericSelectorDD.element,
-																	 change:changed,
-													  		   		  displayFormatter : function() {
-													  		   		  	var val = numericSelectorDD.value();
-													  		   		  	return formatValue(val);
-													  		   		  } 
-													  		   		})
-										   		  .data("kendoExtDropDown");
-	   		var dateDD = $("#dropDownDateRange").kendoExtDropDown({ content: dateSelectorDD.element,
-	   																change:changed,
-													  		   		  displayFormatter : function() {
-													  		   		  	var val = dateSelectorDD.value();
-													  		   		  	return formatValue(val, "M/d/yyyy");
-													  		   		  } 
-													  		   		})
-										   	   .data("kendoExtDropDown");
-	   		var calendarDD = $("#dropDownCalendarRange").kendoExtDropDown({ content: calendarSelectorDD.element,
-	   																		change:changed,
-															  		   		  displayFormatter : function() {
-															  		   		  	var val = calendarSelectorDD.value();
-															  		   		  	return formatValue(val, "M/d/yyyy");
-															  		   		  }
-															  		   		})
-											   	  .data("kendoExtDropDown");
+       var changePage = function(route, name, path, path, isRemoteLoad) {
+            layout.showIn(contentArea, views[name]); // switch view
 
-			var gridDD = $("#dropDownGrid").kendoExtDropDown({ content: gridSelectorDD.element,
-															   change:changed,
-																valueProvider: function(e) {
-																	var result = "";
-																	var selected = gridSelectorDD.select();
-																	var data = gridSelectorDD.dataItem(selected);
-																	if(data) {
-											                    		return data.CustomerID;
-											                    	}
-											                    	return undefined;
-																} 
-															})
-											   	  		.data("kendoExtDropDown");
+            $(document).trigger("viewSwtichedEvent", { route: route, name: name, path: path, isRemotelyLoaded: isRemoteLoad }); // publish event view has been loaded (EventAggregator pattern)
+            kendo.fx(contentArea).slideInRight().play().then(function() { 
+                //fix issue with alignment
+                document.getElementById('body').style.WebkitTransform = "none";
+            });; // transition, slide view back to the right (center)
+       };
 
- var inlineDefault = new kendo.data.HierarchicalDataSource({
-                    data: [
-                        { text: "Furniture", items: [
-                            { text: "Tables & Chairs" },
-                            { text: "Sofas" },
-                            { text: "Occasional Furniture" }
-                        ] },
-                        { text: "Decor", items: [
-                            { text: "Bed Linen" },
-                            { text: "Curtains & Blinds" },
-                            { text: "Carpets" }
-                        ] }
-                    ]
-                });
+         var addRoute = function (route, name, path, forceRemoteLoad, model) {
+                    forceRemoteLoad = typeof forceRemoteLoad !== "undefined" ? forceRemoteLoad : false;
+                    router.route(route, function () {
+                       kendo.fx(contentArea).slideInRight().reverse().then(function () { // transition, slide view left*/
+                            
+                            ensureView(name, path, model, forceRemoteLoad).then( function(x) {
+                                changePage(route, name, path, x); 
+                            });
+                        });
+                    });
+                };
 
- 			
+ 
 
-			// var kendoDropDownEditor= $("#kendoDropDownEditor").kendoExtDropDownKendoWidget({ widget:  function() {
-			// 	return $("<textarea rows=\"10\" cols=\"30\" contentEditable>asdfsd a sdfs</textarea>").kendoEditor().data("kendoEditor");
-			// },
-			// 																				   change:changed,
-			// 																				   select:changed
-			// 																				})
-			// 																   	  		.data("kendoExtDropDownKendoWidget");
+        addRoute("/", "home", "views/home.html");
 
-			var kendoDropDownTreeView = $("#kendoDropDownWidget").kendoExtDropDownKendoWidget({ widget: function() {
-																	return $("<div/>").kendoTreeView({
-																		                    dataSource: inlineDefault
-																		                })
-																					.data("kendoTreeView");
-																},
-															   change:changed,
-															   select:changed
-															})
-											   	  		.data("kendoExtDropDownKendoWidget");
+        //Basic Range Picker
+        addRoute("/ExtRangePicker/Date", "date", "views/ExtRangePicker/date.html");
+        addRoute("/ExtRangePicker/Calendar", "calendar", "views/ExtRangePicker/calendar.html");
+        addRoute("/ExtRangePicker/Numeric", "numeric", "views/ExtRangePicker/numeric.html");
 
-			var kendoDropDownGrid = $("#kendoDropDownGrid").kendoExtDropDownKendoWidget({ widget: function() {
-																	return $("<div/>").kendoGrid({
-												                        dataSource: {
-												                            type: "odata",
-												                            transport: {
-												                                read: "http://demos.kendoui.com/service/Northwind.svc/Orders"
-												                            },
-												                            schema: {
-												                                model: {
-												                                    fields: {
-												                                        OrderID: { type: "number" },
-												                                        Freight: { type: "number" },
-												                                        ShipName: { type: "string" },
-												                                        OrderDate: { type: "date" },
-												                                        ShipCity: { type: "string" }
-												                                    }
-												                                }
-												                            },
-												                            pageSize: 20,
-												                            serverPaging: true,
-												                            serverFiltering: true,
-												                            serverSorting: true
-												                        },
-												                        height: 430,
-												                        filterable: true,
-												                        sortable: true,
-												                        pageable: true,
-												            			selectable: true,
-												                        columns: [{
-												                                field:"OrderID",
-												                                filterable: false
-												                            },
-												                            "Freight",
-												                            {
-												                                field: "OrderDate",
-												                                title: "Order Date",
-												                                width: 120,
-												                                format: "{0:MM/dd/yyyy}"
-												                            }, {
-												                                field: "ShipName",
-												                                title: "Ship Name",
-												                                width: 260
-												                            }, {
-												                                field: "ShipCity",
-												                                title: "Ship City",
-												                                width: 150
-												                            }
-												                        ]
-												                    }).data("kendoGrid");
-																},
-															   change:changed,
-															   select:changed,
-															   valueFormatter : function(val) {
-															   	return val? val.CustomerID : "";
-															   }
-															})
-											   	  		.data("kendoExtDropDownKendoWidget");
 
-			numericSelectorDD.bind("change", changed);
-			dateSelectorDD.bind("change", changed);
-			calendarSelectorDD.bind("change", changed);
+        //Drop down range picker
+        addRoute("/ExtDropDown/Numeric", "ext-dd-custom-numeric", "views/ExtDropDown/numeric.html");
+        addRoute("/ExtDropDown/Date", "ext-dd-custom-date", "views/ExtDropDown/date.html");
+        addRoute("/ExtDropDown/Calendar", "ext-dd-custom-calendar", "views/ExtDropDown/calendar.html");
+        addRoute("/ExtDropDown/Grid", "ext-dd-custom-grid", "views/ExtDropDown/grid.html");
+        addRoute("/ExtDropDown/Widget", "ext-dd-widget", "views/ExtDropDown/widget.html");
 
-			numericDD.bind("open", function(e) {
-				console.log("open");
-			});
+         //Drop down range picker
+        addRoute("/ExtDropDownRangePickers/Numeric", "ext-dd-numeric", "views/ExtDropDownRangePickers/numeric.html");
+        addRoute("/ExtDropDownRangePickers/Date", "ext-dd-date", "views/ExtDropDownRangePickers/date.html");
+        addRoute("/ExtDropDownRangePickers/Calendar", "ext-dd-calendar", "views/ExtDropDownRangePickers/calendar.html");
+        addRoute("/ExtDropDownRangePickers/AdvancedDatePicker", "ext-dd-ext-date-picker", "views/ExtDropDownRangePickers/AdvancedDatePicker.html");
 
-			numericDD.bind("close", function(e) {
-				console.log("close");
-			});
 
-			function changed(e) {
-				console.log("changed (event binding)");
-				console.log(e.sender.value());
-			} 
+        addRoute("/ExtDateRangePicker", "categories", "views/rangePicker.html");
+        addRoute("/Other", "Other", "views/customers.html");
 
-			function changed2(e) {
-				console.log("changed (options bound)");
-				console.log(e.sender.value());
-			} 
+        
 
-			function formatValue(val, format) {
-				if(val && (val.from || val.to)) {
-	   		  		return kendo.format("{0} - {1}", kendo.toString(val.from, format) || "and Before", kendo.toString(val.to, format) || "and After");
-	   		  	}
-	   		  	return "";
-			}
-		});
-	</script>
+        router.start();
+ });
+         //is this needed - REALLY?!
+        //kendo.init($("#app"));
+    });
+
+    
+
+     var templateLoader = (function ($, host) {
+            return {
+                loadExtTemplate: function (name, path) {
+                    return $.ajax({
+                        async: false,
+                        url: path,
+                        cache: false,
+                       
+                        error: function (result) {
+                            alert("Error Loading View/Template -- TODO: Better Error Handling");
+                        }
+                    });
+                }
+            };
+        })(jQuery, document);
+
+    var ensureView = function(name, path, model, force) {
+        var def = $.Deferred();
+
+
+         if (views[name] == null || force) {
+             templateLoader.loadExtTemplate(name, path)
+                         .success(function(result) {
+                                     views[name] = new kendo.View($(result), {model:model});
+
+                                     def.resolve(true);
+                                 }); 
+             
+         } else {
+             def.resolve(false);
+         }
+
+         return def.promise();
+    }
+
+
+    function changed(e) {
+        console.log("changed (event binding)");
+        console.log(e.sender.value());
+    } 
+
+    function changed2(e) {
+        console.log("changed (options bound)");
+        console.log(e.sender.value());
+    } 
+
+    function formatValue(val, format) {
+        if(val && (val.from || val.to)) {
+            return kendo.format("{0} - {1}", kendo.toString(val.from, format) || "and Before", kendo.toString(val.to, format) || "and After");
+        }
+        return "";
+    }
+ 
+</script>
   </body>
 </html>

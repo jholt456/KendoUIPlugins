@@ -1,0 +1,47 @@
+<div>
+	<h3>Calendar Date Range Picker</h3>
+	<p>Calendar highlights values between selected dates on the left and right</p>
+	<div id="calendarRangePicker" ></div>
+
+	<h3>Month / Year Range Picker </h3>
+	<div id="calendarRangePickerMonth" ></div>
+
+	<script>
+		$(function() {
+
+			var today = new Date();
+			var future = new Date();
+			var x = 31; 
+			future.setDate(today.getDate() + x);
+
+			$("#calendarRangePicker").kendoCalendarRangePicker({
+																	change:changed, 
+												                    fromPickerOptions : {
+												                        value: today
+												                    },
+												                    toPickerOptions : {
+												                        value: future
+												                    }
+											                }).data("kendoCalendarRangePicker");
+
+			$("#calendarRangePickerMonth").kendoCalendarRangePicker({
+																	change:changed, 
+																	defaultPickerOptions: {
+																		// defines the start view
+													                    start: "year",
+
+													                    // defines when the calendar should return date
+													                    depth: "year",
+																	},
+												                    fromPickerOptions : {
+												                        value: today
+												                    },
+												                    toPickerOptions : {
+												                        value: future
+												                    }
+											                }).data("kendoCalendarRangePicker");
+
+			
+		});
+	</script>
+</div>

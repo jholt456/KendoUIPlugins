@@ -1,0 +1,30 @@
+<div>
+
+	<p>This examples use a drop down which allows users to inject any content into them during set up. They were the first step to building the plugins shown in the next section; so I included them here. They require a bit of extra configuration and are a little rough, though they allow some intersting things, such as putting any kendo widget within a drop down.</p>
+
+	<h3>Calendar Range Picker Dropdown</h3>
+	<div id="dropDownCalendarRange"></div>
+	<div id="dropDownCalendarContent"></div>
+	<script>
+		$(function() {
+			
+
+			var calendarSelectorDD = $("#dropDownCalendarContent").kendoCalendarRangePicker( { 
+																								change:changed2 
+																							  })
+																  .data("kendoCalendarRangePicker");
+
+
+			var calendarDD = $("#dropDownCalendarRange").kendoExtDropDown({ 
+																			content: calendarSelectorDD.element,
+																			change:changed,
+															  		   		displayFormatter : function() {
+																				  		   		  	var val = calendarSelectorDD.value();
+																				  		   		  	return formatValue(val, "M/d/yyyy");
+																				  		   		  }
+															  		   		})
+														.data("kendoExtDropDown");
+		});
+	</script>
+
+</div>

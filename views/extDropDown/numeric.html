@@ -1,0 +1,33 @@
+<div>
+	
+	<p>This examples use a drop down which allows users to inject any content into them during set up. They were the first step to building the plugins shown in the next section; so I included them here. They require a bit of extra configuration and are a little rough, though they allow some intersting things, such as putting any kendo widget within a drop down.</p>
+
+	<h3>Numeric Range Picker Dropdown</h3>
+	<div id="dropDownNumeric"></div>
+	<div id="dropDownNumericContent"></div>
+
+	<script>
+		$(function() {
+			$("#dropDownNumericPicker").kendoExtDropDownNumericRangePicker({
+																				change:changed
+																		    });
+
+			var numericSelectorDD = $("#dropDownNumericContent").kendoNumericRangePicker({ 
+																								change:changed2 
+																						 })
+															 	.data("kendoNumericRangePicker");
+
+
+			var numericDD = $("#dropDownNumeric").kendoExtDropDown({ 
+																		content: numericSelectorDD.element,
+																		change:changed,
+															  			displayFormatter : function() {
+																				  			  	var val = numericSelectorDD.value();
+																				  			  	return formatValue(val);
+																				  			} 
+															  		})
+												.data("kendoExtDropDown");
+		});
+	</script>
+
+</div>

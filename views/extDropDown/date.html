@@ -1,0 +1,31 @@
+<div>
+	<p>This examples use a drop down which allows users to inject any content into them during set up. They were the first step to building the plugins shown in the next section; so I included them here. They require a bit of extra configuration and are a little rough, though they allow some intersting things, such as putting any kendo widget within a drop down.</p>
+
+
+	<h3>Date Range Picker Dropdown</h3>
+	<div id="dropDownDateRange"></div>
+	<div id="dropDownDateContent"></div>	
+	<script>
+		$(function() {
+			$("#dropDownDatePicker").kendoExtDropDownDateRangePicker({
+																		change:changed
+																	 });
+
+			var dateSelectorDD = $("#dropDownDateContent").kendoDateRangePicker({ 
+																					change:changed2 
+																				})
+														  .data("kendoDateRangePicker");
+
+			var dateDD = $("#dropDownDateRange").kendoExtDropDown({ content: dateSelectorDD.element,
+	   																change:changed,
+													  		   		  displayFormatter : function() {
+													  		   		  	var val = dateSelectorDD.value();
+													  		   		  	return formatValue(val, "M/d/yyyy");
+													  		   		  } 
+													  		   		})
+										   	   .data("kendoExtDropDown");
+
+		});
+	</script>
+
+</div>

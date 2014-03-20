@@ -1,0 +1,112 @@
+<div>
+	<p>These examples extend the drop down specfifically for use with <em>any</em> kendo widgets.</p>
+	<h3>Kendo Widget Drop Down Tree View</h3>
+	<div id="kendoDropDownWidget"></div>
+	<h3>Kendo Widget Drop Down Grid</h3>
+	<div id="kendoDropDownGrid"></div>
+	<h3>Kendo Widget Drop Down Editor</h3>
+	<div id="kendoDropDownEditor"></div>	
+
+	<script>
+		$(function() {
+
+			var inlineDefault = new kendo.data.HierarchicalDataSource({
+                    data: [
+                        { text: "Furniture", items: [
+                            { text: "Tables & Chairs" },
+                            { text: "Sofas" },
+                            { text: "Occasional Furniture" }
+                        ] },
+                        { text: "Decor", items: [
+                            { text: "Bed Linen" },
+                            { text: "Curtains & Blinds" },
+                            { text: "Carpets" }
+                        ] }
+                    ]
+                });
+
+ 			
+
+			 var kendoDropDownEditor= $("#kendoDropDownEditor").kendoExtDropDownKendoWidget({ 
+			 																				   widget:  function() {
+																							 	return $("<div contentEditable>asdfsd a sdfs</div>").kendoEditor().data("kendoEditor");
+																							   },
+			 																				   change:changed,
+			 																				   select:changed
+			 																				})
+			// 		
+
+			var kendoDropDownTreeView = $("#kendoDropDownWidget").kendoExtDropDownKendoWidget({
+																								widget: function() {
+																									return $("<div/>").kendoTreeView({
+																										                    dataSource: inlineDefault
+																										                })
+																													  .data("kendoTreeView");
+																								},
+																							   change:changed,
+																							   select:changed
+																							})
+											   	  		.data("kendoExtDropDownKendoWidget");
+
+			var kendoDropDownGrid = $("#kendoDropDownGrid").kendoExtDropDownKendoWidget({ 
+																							widget: function() {
+																	return $("<div/>").kendoGrid({
+												                        dataSource: {
+												                            type: "odata",
+												                            transport: {
+												                                read: "http://demos.kendoui.com/service/Northwind.svc/Orders"
+												                            },
+												                            schema: {
+												                                model: {
+												                                    fields: {
+												                                        OrderID: { type: "number" },
+												                                        Freight: { type: "number" },
+												                                        ShipName: { type: "string" },
+												                                        OrderDate: { type: "date" },
+												                                        ShipCity: { type: "string" }
+												                                    }
+												                                }
+												                            },
+												                            pageSize: 20,
+												                            serverPaging: true,
+												                            serverFiltering: true,
+												                            serverSorting: true
+												                        },
+												                        filterable: true,
+												                        sortable: true,
+												                        pageable: true,
+												            			selectable: true,
+												                        columns: [{
+												                                field:"OrderID",
+												                                filterable: false
+												                            },
+												                            "Freight",
+												                            {
+												                                field: "OrderDate",
+												                                title: "Order Date",
+												                                width: 120,
+												                                format: "{0:MM/dd/yyyy}"
+												                            }, {
+												                                field: "ShipName",
+												                                title: "Ship Name",
+												                                width: 260
+												                            }, {
+												                                field: "ShipCity",
+												                                title: "Ship City",
+												                                width: 150
+												                            }
+												                        ]
+												                    }).data("kendoGrid");
+																},
+															   change:changed,
+															   select:changed,
+															   valueFormatter : function(val) {
+															   	return val? val.CustomerID : "";
+															   }
+															})
+											   	  		.data("kendoExtDropDownKendoWidget");
+
+		});
+	</script>
+
+</div>
