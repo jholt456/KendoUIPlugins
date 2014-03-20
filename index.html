@@ -105,34 +105,32 @@
         addRoute("/", "home", "views/home.html");
 
         //Basic Range Picker
-        addRoute("/ExtRangePicker/Date", "date", "views/ExtRangePicker/date.html");
-        addRoute("/ExtRangePicker/Calendar", "calendar", "views/ExtRangePicker/calendar.html");
-        addRoute("/ExtRangePicker/Numeric", "numeric", "views/ExtRangePicker/numeric.html");
+        addRoute("/ExtRangePicker/Date", "date", "views/extRangePicker/date.html");
+        addRoute("/ExtRangePicker/Calendar", "calendar", "views/extRangePicker/calendar.html");
+        addRoute("/ExtRangePicker/Numeric", "numeric", "views/extRangePicker/numeric.html");
 
 
         //Drop down range picker
-        addRoute("/ExtDropDown/Numeric", "ext-dd-custom-numeric", "views/ExtDropDown/numeric.html");
-        addRoute("/ExtDropDown/Date", "ext-dd-custom-date", "views/ExtDropDown/date.html");
-        addRoute("/ExtDropDown/Calendar", "ext-dd-custom-calendar", "views/ExtDropDown/calendar.html");
-        addRoute("/ExtDropDown/Grid", "ext-dd-custom-grid", "views/ExtDropDown/grid.html");
-        addRoute("/ExtDropDown/Widget", "ext-dd-widget", "views/ExtDropDown/widget.html");
+        addRoute("/ExtDropDown/Numeric", "ext-dd-custom-numeric", "views/extDropDown/numeric.html");
+        addRoute("/ExtDropDown/Date", "ext-dd-custom-date", "views/extDropDown/date.html");
+        addRoute("/ExtDropDown/Calendar", "ext-dd-custom-calendar", "views/extDropDown/calendar.html");
+        addRoute("/ExtDropDown/Grid", "ext-dd-custom-grid", "views/extDropDown/grid.html");
+        addRoute("/ExtDropDown/Widget", "ext-dd-widget", "views/extDropDown/widget.html");
 
          //Drop down range picker
-        addRoute("/ExtDropDownRangePickers/Numeric", "ext-dd-numeric", "views/ExtDropDownRangePickers/numeric.html");
-        addRoute("/ExtDropDownRangePickers/Date", "ext-dd-date", "views/ExtDropDownRangePickers/date.html");
-        addRoute("/ExtDropDownRangePickers/Calendar", "ext-dd-calendar", "views/ExtDropDownRangePickers/calendar.html");
-        addRoute("/ExtDropDownRangePickers/AdvancedDatePicker", "ext-dd-ext-date-picker", "views/ExtDropDownRangePickers/AdvancedDatePicker.html");
+        addRoute("/ExtDropDownRangePickers/Numeric", "ext-dd-numeric", "views/extDropDownRangePickers/numeric.html");
+        addRoute("/ExtDropDownRangePickers/Date", "ext-dd-date", "views/extDropDownRangePickers/date.html");
+        addRoute("/ExtDropDownRangePickers/Calendar", "ext-dd-calendar", "views/extDropDownRangePickers/calendar.html");
+        addRoute("/ExtDropDownRangePickers/AdvancedDatePicker", "ext-dd-ext-date-picker", "views/extDropDownRangePickers/AdvancedDatePicker.html");
 
 
-        addRoute("/ExtDateRangePicker", "categories", "views/rangePicker.html");
-        addRoute("/Other", "Other", "views/customers.html");
+        addRoute("/ExtDateRangePicker", "full", "views/rangePicker.html");
 
         
 
         router.start();
  });
-         //is this needed - REALLY?!
-        //kendo.init($("#app"));
+         
     });
 
     
