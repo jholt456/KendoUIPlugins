@@ -111,9 +111,6 @@
                  });
 
                  def.resolve(true);
-             })
-             .error(function(result, xhr, status) {
-                 alert("wtf");
              });
 
      } else {
