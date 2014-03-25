@@ -103,7 +103,7 @@
      var def = $.Deferred();
 
 
-     if (views[name] === null || force) {
+     if (!views[name] || force) {
          templateLoader.loadExtTemplate(name, path)
              .success(function(result) {
                  views[name] = new kendo.View($(result), {
